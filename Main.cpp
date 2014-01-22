@@ -36,17 +36,17 @@ int main(int argc, char** argv){
 
     HTTPStreamClient* net = new HTTPStreamClient();
 
+    net->connect(net,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(printSocketError(QAbstractSocket::SocketError)));
+
     ISSLClientSession* session = new ISSLClientSession(net);
     ISSLClientCatalog* ctrl = new ISSLClientCatalog(net,session);
     ISSLClientData* bind = new ISSLClientData(net,session);
 
+    session->connect(net,SIGNAL(connected()),SLOT(io()));
+
     ctrl->connect(session,SIGNAL(success()),SLOT(io()));
 
     bind->connect(ctrl,SIGNAL(success()),SLOT(io()));
-
-    session->connect(net,SIGNAL(connected()),SLOT(io()));
-
-    session->connect(net,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(error()));
 
     net->connectToHost(ISSLClient::HOST,ISSLClient::PORT);
 

@@ -63,3 +63,70 @@ HTTPStreamResponse* HTTPStreamClient::send(HTTPStreamRequest* q){
         return 0;
     }
 }
+void HTTPStreamClient::printSocketError(QAbstractSocket::SocketError error){
+    switch(error){
+    case QAbstractSocket::ConnectionRefusedError:
+        qDebug() << "HTTPStreamClient.error [ConnectionRefusedError]";
+        break;
+    case QAbstractSocket::RemoteHostClosedError:
+        qDebug() << "HTTPStreamClient.error [RemoteHostClosedError]";
+        break;
+    case QAbstractSocket::HostNotFoundError:
+        qDebug() << "HTTPStreamClient.error [HostNotFoundError]";
+        break;
+    case QAbstractSocket::SocketAccessError:
+        qDebug() << "HTTPStreamClient.error [SocketAccessError]";
+        break;
+    case QAbstractSocket::SocketResourceError:
+        qDebug() << "HTTPStreamClient.error [SocketResourceError]";
+        break;
+    case QAbstractSocket::SocketTimeoutError:
+        qDebug() << "HTTPStreamClient.error [SocketTimeoutError]";
+        break;
+    case QAbstractSocket::DatagramTooLargeError:
+        qDebug() << "HTTPStreamClient.error [DatagramTooLargeError]";
+        break;
+    case QAbstractSocket::NetworkError:
+        qDebug() << "HTTPStreamClient.error [NetworkError]";
+        break;
+    case QAbstractSocket::AddressInUseError:
+        qDebug() << "HTTPStreamClient.error [AddressInUseError]";
+        break;
+    case QAbstractSocket::SocketAddressNotAvailableError:
+        qDebug() << "HTTPStreamClient.error [SocketAddressNotAvailableError]";
+        break;
+    case QAbstractSocket::UnsupportedSocketOperationError:
+        qDebug() << "HTTPStreamClient.error [UnsupportedSocketOperationError]";
+        break;
+    case QAbstractSocket::ProxyAuthenticationRequiredError:
+        qDebug() << "HTTPStreamClient.error [ProxyAuthenticationRequiredError]";
+        break;
+    case QAbstractSocket::SslHandshakeFailedError:
+        qDebug() << "HTTPStreamClient.error [SslHandshakeFailedError]";
+        break;
+    case QAbstractSocket::UnfinishedSocketOperationError:
+        qDebug() << "HTTPStreamClient.error [UnfinishedSocketOperationError]";
+        break;
+    case QAbstractSocket::ProxyConnectionRefusedError:
+        qDebug() << "HTTPStreamClient.error [ProxyConnectionRefusedError]";
+        break;
+    case QAbstractSocket::ProxyConnectionClosedError:
+        qDebug() << "HTTPStreamClient.error [ProxyConnectionClosedError]";
+        break;
+    case QAbstractSocket::ProxyConnectionTimeoutError:
+        qDebug() << "HTTPStreamClient.error [ProxyConnectionTimeoutError]";
+        break;
+    case QAbstractSocket::ProxyNotFoundError:
+        qDebug() << "HTTPStreamClient.error [ProxyNotFoundError]";
+        break;
+    case QAbstractSocket::ProxyProtocolError:
+        qDebug() << "HTTPStreamClient.error [ProxyProtocolError]";
+        break;
+    case QAbstractSocket::UnknownSocketError:
+        qDebug() << "HTTPStreamClient.error [UnknownSocketError]";
+        break;
+    default:
+        qDebug() << "HTTPStreamClient.error [*]";
+        break;
+    }
+}

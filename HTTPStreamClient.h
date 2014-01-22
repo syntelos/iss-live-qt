@@ -28,12 +28,13 @@
  * Socket primitive for streaming connections
  */
 class HTTPStreamClient : public QTcpSocket, public HTTP::Device {
+    Q_OBJECT;
 
  public:
     HTTPStreamClient(QObject* p = 0);
     ~HTTPStreamClient();
     /*!
-     * \sa HTTP::Device
+     * \class HTTP::Device
      */
     virtual QString peerName() const;
     virtual quint16 peerPort() const;
@@ -45,5 +46,7 @@ class HTTPStreamClient : public QTcpSocket, public HTTP::Device {
 
     HTTPStreamResponse* send(HTTPStreamRequest*);
 
+ public slots:
+     void printSocketError(QAbstractSocket::SocketError);
 };
 #endif

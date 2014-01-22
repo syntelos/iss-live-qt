@@ -91,9 +91,9 @@ void HTTPStreamRequest::write(QIODevice* io){
             QString hostname = device->peerName();
             quint16 portnum = device->peerPort();
             if (0 != portnum && 80 != portnum){
-
-                hostname += ":%d";
-                hostname.arg(portnum);
+                QString fmt;
+                fmt = QString(":%1").arg(portnum);
+                hostname += fmt;
             }
             setHeader("Host", hostname);
         }
