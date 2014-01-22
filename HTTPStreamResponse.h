@@ -42,11 +42,11 @@ struct HTTPStreamResponse : public HTTPStreamIO {
      * Read response line, headers, and any response entity body
      * specified by a "Content-Length" header.
      */
-    virtual void read(QIODevice* io);
+    virtual void read(HTTP::Device* io);
     /*!
      * Set header "Content-Length" for a non-empty response entity
      * buffer.
      */
-    virtual void write(QIODevice* io);
+    virtual void write(HTTP::Device* io);
 };
 #endif

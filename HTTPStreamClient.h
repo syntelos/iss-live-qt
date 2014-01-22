@@ -33,11 +33,23 @@ class HTTPStreamClient : public QTcpSocket, public HTTP::Device {
  public:
     HTTPStreamClient(QObject* p = 0);
     ~HTTPStreamClient();
+
+    virtual bool isOpen();
+
+    virtual bool waitForReadyRead();
+
+    virtual QByteArray readLine();
+
+    virtual QByteArray read(qint64);
     /*!
      * \class HTTP::Device
      */
     virtual QString peerName() const;
     virtual quint16 peerPort() const;
+
+    virtual void write(const QByteArray&);
+
+    virtual void write(const char*);
     /*!
      * Return a non null response when this socket is open and the
      * argument is a valid request.

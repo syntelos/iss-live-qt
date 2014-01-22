@@ -18,10 +18,10 @@
 
 #include "ISSLClient.h"
 
-//const char* ISSLClient::HOST = "push1.jsc.nasa.gov";
-//const int ISSLClient::PORT = 80;
-const char* ISSLClient::HOST = "192.168.1.3";
-const int   ISSLClient::PORT = 8080;
+const char* ISSLClient::HOST = "push1.jsc.nasa.gov";
+const int ISSLClient::PORT = 80;
+//const char* ISSLClient::HOST = "192.168.1.3";
+//const int   ISSLClient::PORT = 8080;
 const char* ISSLClient::FORM = "application/x-www-form-urlencoded";
 const char* ISSLClient::CONN = "Connection";
 const char* ISSLClient::CONN_KEAL = "keep-alive";

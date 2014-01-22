@@ -25,11 +25,11 @@ HTTPStreamChunk::HTTPStreamChunk()
 bool HTTPStreamChunk::isValid(){
     return (0 < QBuffer::size());
 }
-void HTTPStreamChunk::read(QIODevice* io){
+void HTTPStreamChunk::read(HTTP::Device* io){
 
     HTTPStreamIO::clear();
 
-    if (io->canReadLine()){
+    if (io->waitForReadyRead()){
         /*
          * chunk-size
          */
@@ -37,7 +37,7 @@ void HTTPStreamChunk::read(QIODevice* io){
         QByteArray line = input.trimmed();
 
         int retry;
-        for (retry = 0; 0 == line.length() && io->canReadLine() && retry < 2; retry++){
+        for (retry = 0; 0 == line.length() && retry < 2; retry++){
 
             input = io->readLine();
             line = input.trimmed();
@@ -87,7 +87,7 @@ void HTTPStreamChunk::read(QIODevice* io){
         }
     }
 }
-void HTTPStreamChunk::write(QIODevice* io){
+void HTTPStreamChunk::write(HTTP::Device* io){
     /*
      * chunk-size
      */

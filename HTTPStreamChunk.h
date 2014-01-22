@@ -30,8 +30,8 @@ class HTTPStreamChunk : public HTTPStreamIO {
 
     virtual bool isValid();
 
-    virtual void read(QIODevice* io);
+    virtual void read(HTTP::Device* io);
 
-    virtual void write(QIODevice* io);
+    virtual void write(HTTP::Device* io);
 };
 #endif

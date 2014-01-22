@@ -31,11 +31,11 @@ void HTTPStreamRequest::clear(){
     protocol.clear();
     HTTPStreamIO::clear();
 }
-void HTTPStreamRequest::read(QIODevice* io){
+void HTTPStreamRequest::read(HTTP::Device* io){
 
     HTTPStreamRequest::clear();
 
-    if (io->waitForReadyRead(10000) && io->canReadLine()){
+    if (io->waitForReadyRead()){
         /*
          * Request line
          */
@@ -51,7 +51,7 @@ void HTTPStreamRequest::read(QIODevice* io){
                 /*
                  * Headers
                  */
-                while (io->waitForReadyRead(10000) && io->canReadLine()){
+                while (io->waitForReadyRead()){
                     HTTPStreamHeader h(io->readLine());
                     if (h.isValid())
                         QList<HTTPStreamHeader>::append(h);
@@ -70,7 +70,7 @@ void HTTPStreamRequest::read(QIODevice* io){
         }
     }
 }
-void HTTPStreamRequest::write(QIODevice* io){
+void HTTPStreamRequest::write(HTTP::Device* io){
     if (isValid() && io->isOpen()){
         io->write(method.toByteArray());
         io->write(HTTP::SP);

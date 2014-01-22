@@ -40,11 +40,11 @@ bool HTTPStreamResponse::isOk(){
     else
         return false;
 }
-void HTTPStreamResponse::read(QIODevice* io){
+void HTTPStreamResponse::read(HTTP::Device* io){
 
     HTTPStreamResponse::clear();
 
-    if (io->waitForReadyRead(10000) && io->canReadLine()){
+    if (io->waitForReadyRead()){
         /*
          * Request line
          */
@@ -70,7 +70,7 @@ void HTTPStreamResponse::read(QIODevice* io){
                 /*
                  * Headers
                  */
-                while (io->waitForReadyRead(10000) && io->canReadLine()){
+                while (io->waitForReadyRead()){
                     HTTPStreamHeader h(io->readLine());
                     if (h.isValid())
                         QList<HTTPStreamHeader>::append(h);
@@ -89,7 +89,7 @@ void HTTPStreamResponse::read(QIODevice* io){
         }
     }
 }
-void HTTPStreamResponse::write(QIODevice* io){
+void HTTPStreamResponse::write(HTTP::Device* io){
     if (isValid() && io->isOpen()){
         io->write(protocol.toByteArray());
         io->write(HTTP::SP);

@@ -30,20 +30,25 @@ namespace HTTP {
     static const char* SP = " ";
     static const char* CRLF = "\r\n";
     /*!
-     * Implemented by the QIODevice passed to HTTPStreamIO read and
-     * write.
+     * Argument to HTTPStreamIO read and write.
      */
     struct Device {
-        /*!
-         * Required non-empty hostname for the opposite end of this
-         * connection
-         */
+
+        virtual bool isOpen() = 0;
+
+        virtual bool waitForReadyRead() = 0;
+
+        virtual QByteArray readLine() = 0;
+
+        virtual QByteArray read(qint64) = 0;
+
         virtual QString peerName() const = 0;
-        /*!
-         * Required positively-valued port number for the opposite end
-         * of this connection (default 80).
-         */
+
         virtual quint16 peerPort() const = 0;
+
+        virtual void write(const QByteArray&) = 0;
+
+        virtual void write(const char*) = 0;
     };
 }
 
@@ -68,10 +73,10 @@ struct HTTPStreamIO : public QList<HTTPStreamHeader>, public QBuffer {
     /*!
      * Read the content of this data structure
      */
-    virtual void read(QIODevice* io) = 0;
+    virtual void read(HTTP::Device* io) = 0;
     /*!
      * Write the content of this data structure
      */
-    virtual void write(QIODevice* io) = 0;
+    virtual void write(HTTP::Device* io) = 0;
 };
 #endif

@@ -25,6 +25,22 @@ HTTPStreamClient::HTTPStreamClient(QObject* p)
 HTTPStreamClient::~HTTPStreamClient()
 {
 }
+bool HTTPStreamClient::isOpen(){
+
+    return QTcpSocket::isOpen();
+}
+bool HTTPStreamClient::waitForReadyRead(){
+
+    return QTcpSocket::waitForReadyRead();
+}
+QByteArray HTTPStreamClient::readLine(){
+
+    return QTcpSocket::readLine();
+}
+QByteArray HTTPStreamClient::read(qint64 len){
+
+    return QTcpSocket::read(len);
+}
 QString HTTPStreamClient::peerName() const {
 
     return QTcpSocket::peerName();
@@ -32,6 +48,14 @@ QString HTTPStreamClient::peerName() const {
 quint16 HTTPStreamClient::peerPort() const {
 
     return QTcpSocket::peerPort();
+}
+void HTTPStreamClient::write(const QByteArray& buf){
+
+    QTcpSocket::write(buf);
+}
+void HTTPStreamClient::write(const char* string){
+
+    QTcpSocket::write(string);
 }
 HTTPStreamResponse* HTTPStreamClient::send(HTTPStreamRequest& q){
     if (isOpen() && q.isValid()){

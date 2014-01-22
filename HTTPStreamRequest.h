@@ -40,12 +40,12 @@ struct HTTPStreamRequest : public HTTPStreamIO {
      * The the request line, headers, and any request entity body
      * specified by a "Content-Length" header.
      */
-    virtual void read(QIODevice* io);
+    virtual void read(HTTP::Device* io);
     /*!
      * Set header "Content-Length" for a non-empty request entity
      * buffer, and "Host" for the argument device \a io which
      * implements \class HTTP::Device.
      */
-    virtual void write(QIODevice* io);
+    virtual void write(HTTP::Device* io);
 };
 #endif
