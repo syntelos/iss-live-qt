@@ -15,6 +15,7 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QDebug>
 
 #include "HTTPStreamClient.h"
 
@@ -75,9 +76,15 @@ HTTPStreamResponse* HTTPStreamClient::send(HTTPStreamRequest& q){
 HTTPStreamResponse* HTTPStreamClient::send(HTTPStreamRequest* q){
     if (isOpen() && 0 != q && q->isValid()){
 
+        qDebug() << "HTTPStreamClient.send [write]";
+
         q->write(this);
 
+        qDebug() << "HTTPStreamClient.send [p]";
+
         HTTPStreamResponse* p = new HTTPStreamResponse();
+
+        qDebug() << "HTTPStreamClient.send [read]";
 
         p->read(this);
 

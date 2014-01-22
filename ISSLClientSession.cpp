@@ -44,6 +44,7 @@ void ISSLClientSession::io(){
     req.setHeader(USER,USER_AGENT);
     req.setData(qbody);
 
+    qDebug() << "ISSLClientSession.io [send]";
     rep = net->send(req);
 
     if (rep && rep->isOk()){

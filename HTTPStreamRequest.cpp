@@ -51,7 +51,7 @@ void HTTPStreamRequest::read(HTTP::Device* io){
                 /*
                  * Headers
                  */
-                while (io->waitForReadyRead()){
+                while (true){
                     HTTPStreamHeader h(io->readLine());
                     if (h.isValid())
                         QList<HTTPStreamHeader>::append(h);
