@@ -35,6 +35,7 @@ ISSLClientSession::~ISSLClientSession()
     }
 }
 void ISSLClientSession::io(){
+    qDebug() << "ISSLClientSession.io";
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -45,10 +46,14 @@ void ISSLClientSession::io(){
 
     rep = net->send(req);
 
-    if (rep && rep->isOk())
+    if (rep && rep->isOk()){
+        qDebug() << "ISSLClientSession.io [ready]";
         ready();
-    else
+    }
+    else {
+        qDebug() << "ISSLClientSession.io [error]";
         error();
+    }
 }
 void ISSLClientSession::ready(){
     int status = rep->status.toInt();
@@ -67,24 +72,24 @@ void ISSLClientSession::ready(){
                 QByteArray p1 = p0.mid(0,parse);
                 this->session += p1;
 
-                qDebug() << "ISSLClientSession:" << this->session;
+                qDebug() << "ISSLClientSession [success]:" << this->session;
 
                 emit success();
             }
             else {
-                qDebug() << "ISSLClientSession: missing start (parse end) in:" << pbody;
+                qDebug() << "ISSLClientSession [failure]: missing start (parse end) in:" << pbody;
 
                 emit failure();
             }
         }
         else {
-            qDebug() << "ISSLClientSession: missing start (parse begin) in:" << pbody;
+            qDebug() << "ISSLClientSession [failure]: missing start (parse begin) in:" << pbody;
 
             emit failure();
         }
     }
     else {
-        qDebug() << "ISSLClientSession: content length" << len;
+        qDebug() << "ISSLClientSession [failure]: content length" << len;
 
         emit failure();
     }
@@ -101,7 +106,7 @@ void ISSLClientSession::error(){
         qDebug() << "ISSLClientSession.error: HTTP" << status << msg;
     }
     else {
-        qDebug() << "ISSLClientSession.error: HTTP";
+        qDebug() << "ISSLClientSession.error";
     }
 
     emit failure();

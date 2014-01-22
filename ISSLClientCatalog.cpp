@@ -37,6 +37,7 @@ ISSLClientCatalog::~ISSLClientCatalog()
     }
 }
 void ISSLClientCatalog::io(){
+    qDebug() << "ISSLClientCatalog.io";
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -46,10 +47,14 @@ void ISSLClientCatalog::io(){
     req.setData(qbody);
 
     rep = net->send(req);
-    if (rep && rep->isOk())
+    if (rep && rep->isOk()){
+        qDebug() << "ISSLClientCatalog.io [ready]";
         ready();
-    else
+    }
+    else {
+        qDebug() << "ISSLClientCatalog.io [error]";
         error();
+    }
 }
 void ISSLClientCatalog::ready(){
     int status = rep->status.toInt();
@@ -59,11 +64,12 @@ void ISSLClientCatalog::ready(){
 
     uint len = rep->getContentLength();
     if (0 < len){
+        qDebug() << "ISSLClientCatalog [success]: missing content length";
 
         emit success();
     }
     else {
-        qDebug() << "ISSLClientCatalog: missing content length";
+        qDebug() << "ISSLClientCatalog [failure]: missing content length";
 
         emit failure();
     }

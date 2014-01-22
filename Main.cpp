@@ -17,6 +17,7 @@
  */
 #include <iostream>
 #include <QApplication>
+#include <QObject>
 #include <QTextStream>
 
 #include "HTTPStreamClient.h"
@@ -36,17 +37,38 @@ int main(int argc, char** argv){
 
     HTTPStreamClient* net = new HTTPStreamClient();
 
-    net->connect(net,SIGNAL(error(QAbstractSocket::SocketError)),SLOT(printSocketError(QAbstractSocket::SocketError)));
+    QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),net,SLOT(printSocketError(QAbstractSocket::SocketError)));
 
     ISSLClientSession* session = new ISSLClientSession(net);
     ISSLClientCatalog* ctrl = new ISSLClientCatalog(net,session);
     ISSLClientData* bind = new ISSLClientData(net,session);
 
-    session->connect(net,SIGNAL(connected()),SLOT(io()));
+    if (QObject::connect(net,SIGNAL(connected()),session,SLOT(io()))){
 
-    ctrl->connect(session,SIGNAL(success()),SLOT(io()));
+        qDebug() << "Main: connected HTTPStreamClient.connected to ISSLClientSession.io";
+    }
+    else {
+        qDebug() << "Main: failed to connect HTTPStreamClient.connected to ISSLClientSession.io";
+        return 1;
+    }
 
-    bind->connect(ctrl,SIGNAL(success()),SLOT(io()));
+    if (QObject::connect(session,SIGNAL(success()),ctrl,SLOT(io()))){
+
+        qDebug() << "Main: connected ISSLClientSession.success to ISSLClientCatalog.io";
+    }
+    else {
+        qDebug() << "Main: failed to connect ISSLClientSession.success to ISSLClientCatalog.io";
+        return 1;
+    }
+
+    if (QObject::connect(ctrl,SIGNAL(success()),bind,SLOT(io()))){
+
+        qDebug() << "Main: connected ISSLClientCatalog.success to ISSLClientData.io";
+    }
+    else {
+        qDebug() << "Main: failed to connect ISSLClientCatalog.success to ISSLClientData.io";
+        return 1;
+    }
 
     net->connectToHost(ISSLClient::HOST,ISSLClient::PORT);
 

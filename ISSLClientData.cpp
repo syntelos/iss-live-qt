@@ -42,6 +42,7 @@ bool ISSLClientData::hasNotSignal(){
     return los;
 }
 void ISSLClientData::io(){
+    qDebug() << "ISSLClientData.io";
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -52,10 +53,14 @@ void ISSLClientData::io(){
 
     rep = net->send(req);
 
-    if (rep && rep->isOk())
+    if (rep && rep->isOk()){
+        qDebug() << "ISSLClientData.io [ready]";
         ready();
-    else
+    }
+    else {
+        qDebug() << "ISSLClientData.io [error]";
         error();
+    }
 }
 void ISSLClientData::ready(){
     int status = rep->status.toInt();
@@ -89,6 +94,8 @@ void ISSLClientData::ready(){
             delete rep;
             rep = 0;
 
+            qDebug() << "ISSLClientData.ready [failure]: EOL";
+
             emit failure();
 
             return;
@@ -101,6 +108,8 @@ void ISSLClientData::ready(){
                 delete rep;
                 rep = 0;
 
+                qDebug() << "ISSLClientData.ready [failure]: INIT";
+
                 emit failure();
 
                 return;
@@ -110,8 +119,11 @@ void ISSLClientData::ready(){
             }
         }
         else {
+
             delete rep;
             rep = 0;
+
+            qDebug() << "ISSLClientData.ready [failure]: ?";
 
             emit failure();
 
