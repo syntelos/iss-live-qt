@@ -44,7 +44,7 @@ void ISSLClientData::io(){
     qbody += session->session;
     qbody += "&LS_phase=7903&LS_domain=nasa.gov&";
 
-    qDebug() << "ISSLClientData.io [body]" << qbody;
+    // qDebug() << "ISSLClientData.io [body]" << qbody;
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -56,11 +56,11 @@ void ISSLClientData::io(){
     rep = net->send(req);
 
     if (rep && rep->isOk()){
-        qDebug() << "ISSLClientData.io [ready]";
+        // qDebug() << "ISSLClientData.io [ready]";
         ready();
     }
     else {
-        qDebug() << "ISSLClientData.io [error]";
+        // qDebug() << "ISSLClientData.io [error]";
         error();
     }
 }

@@ -31,7 +31,7 @@ ISSLClientDataChunk::ISSLClientDataChunk(const HTTPStreamChunk& rep)
 
     QList<QByteArray> jsonObjects = input.split('\'');
 
-    qDebug() << "ISSLClientDataChunk: [parse begin] count:" << jsonObjects.size();
+    // qDebug() << "ISSLClientDataChunk: [parse begin] count:" << jsonObjects.size();
 
     foreach(const QByteArray& jsonObject, jsonObjects){
 
@@ -43,15 +43,27 @@ ISSLClientDataChunk::ISSLClientDataChunk(const HTTPStreamChunk& rep)
             QRegExp rx0("[\\][,}{]");
 
 
-            qDebug() << "ISSLClientDataChunk: [object]" << jsonObjectString;
-
-            ISSLClientDataChunkPair* pair = new ISSLClientDataChunkPair();
+            // qDebug() << "ISSLClientDataChunk: [object]" << jsonObjectString;
 
             QStringList jsonItem = jsonObjectString.split(rx0,QString::SkipEmptyParts);
-
+            /*
+             * The pair list item is "open" until it is added to the
+             * list.
+             */
+            ISSLClientDataChunkPair pair;
+            bool pair_open = true;
+            /*
+             * Scan fields of the object like a serial set of
+             * registers, accepting the last "Value" seen as most
+             * interesting, and the "CalibratedData" value as final.
+             *
+             * This approach misses things like the clock
+             * synchronization data set in "TIME_000001" -- for that
+             * we'd have to parse the JSON object properly.
+             */
             foreach (const QString& jsonObject, jsonItem){
 
-                qDebug() << "ISSLClientDataChunk: [field]" << jsonObject;
+                // qDebug() << "ISSLClientDataChunk: [field]" << jsonObject;
 
                 int parse = jsonObject.indexOf(':');
 
@@ -66,28 +78,42 @@ ISSLClientDataChunk::ISSLClientDataChunk(const HTTPStreamChunk& rep)
 
                     if (!name.isEmpty() && !value.isEmpty()){
 
-                        qDebug() << "ISSLClientDataChunk: [object name-value]" << name << "=" << value;
+                        // qDebug() << "ISSLClientDataChunk: [object name-value]" << name << "=" << value;
 
                         if (name == "Name"){
                             QByteArray ascii = value.toAscii();
-                            pair->name.clear();
-                            pair->name += ascii;
+                            pair.name.clear();
+                            pair.name += ascii;
                         }
                         else if (name == "Value"){
                             QByteArray ascii = value.toAscii();
-                            pair->value.clear();
-                            pair->value += ascii;
+                            pair.value.clear();
+                            pair.value += ascii;
+
+                            if (pair_open){
+                                pair_open = false;
+                                append(pair);
+                            }
                         }
                         else if (name == "CalibratedData"){
                             QByteArray ascii = value.toAscii();
-                            pair->value.clear();
-                            pair->value += ascii;
+                            pair.value.clear();
+                            pair.value += ascii;
+
+                            if (pair_open){
+                                pair_open = false;
+                                append(pair);
+                            }
                             break;
                         }
                     }
                 }
             }
+            /*
+             * Pair is auto, so there's no "if (pair_open) { delete
+             * pair; }", here.
+             */
         }
     }
-    qDebug() << "ISSLClientDataChunk: [parse end]";
+    // qDebug() << "ISSLClientDataChunk: [parse end]";
 }
