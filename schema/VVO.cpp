@@ -35,21 +35,21 @@
 
 const VVO VVO::I;
 
-const ISSLSchematic VVO::Set[] = {
-    S0000001::I,
-    S0000002::I,
-    S0000003::I,
-    S0000004::I,
-    S0000005::I,
-    S0000006::I,
-    S0000007::I,
-    S0000008::I,
-    S0000009::I,
-    S1000005::I,
-    USLAB000010::I,
-    USLAB000012::I,
-    USLAB000081::I,
-    USLAB000086::I,
+const ISSLSchema::Type VVO::Set[] = {
+    ISSLSchema::TypeS0000001,
+    ISSLSchema::TypeS0000002,
+    ISSLSchema::TypeS0000003,
+    ISSLSchema::TypeS0000004,
+    ISSLSchema::TypeS0000005,
+    ISSLSchema::TypeS0000006,
+    ISSLSchema::TypeS0000007,
+    ISSLSchema::TypeS0000008,
+    ISSLSchema::TypeS0000009,
+    ISSLSchema::TypeS1000005,
+    ISSLSchema::TypeUSLAB000010,
+    ISSLSchema::TypeUSLAB000012,
+    ISSLSchema::TypeUSLAB000081,
+    ISSLSchema::TypeUSLAB000086,
 };
 const uint VVO::Count = 14
 ;
@@ -62,7 +62,8 @@ QList<ISSLSchematic> VVO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -71,9 +72,10 @@ QString VVO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

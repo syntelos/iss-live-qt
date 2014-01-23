@@ -76,3 +76,29 @@ const ISSLConsole& ISSLConsole::For(ISSLConsole::Type type){
     }
 }
 
+QList<ISSLConsole::Type> ISSLConsole::Types(){
+    QList<ISSLConsole::Type> re;
+    re += ISSLConsole::TypeEVA;
+    re += ISSLConsole::TypeADCO;
+    re += ISSLConsole::TypeTOPO;
+    re += ISSLConsole::TypeCRONUS;
+    re += ISSLConsole::TypeSPARTAN;
+    re += ISSLConsole::TypeVVO;
+    re += ISSLConsole::TypeNA;
+    re += ISSLConsole::TypeETHOS;
+    return re;
+}
+
+QList<QString> ISSLConsole::Names(){
+    QList<QString> re;
+    re.append(EVA::I.name);
+    re.append(ADCO::I.name);
+    re.append(TOPO::I.name);
+    re.append(CRONUS::I.name);
+    re.append(SPARTAN::I.name);
+    re.append(VVO::I.name);
+    re.append(NA::I.name);
+    re.append(ETHOS::I.name);
+    return re;
+}
+

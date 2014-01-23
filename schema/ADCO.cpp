@@ -77,63 +77,63 @@
 
 const ADCO ADCO::I;
 
-const ISSLSchematic ADCO::Set[] = {
-    Z1000001::I,
-    Z1000002::I,
-    Z1000003::I,
-    Z1000004::I,
-    Z1000005::I,
-    Z1000006::I,
-    Z1000007::I,
-    Z1000008::I,
-    Z1000009::I,
-    Z1000010::I,
-    Z1000011::I,
-    Z1000012::I,
-    USLAB000001::I,
-    USLAB000002::I,
-    USLAB000003::I,
-    USLAB000004::I,
-    USLAB000005::I,
-    USLAB000006::I,
-    USLAB000007::I,
-    USLAB000008::I,
-    USLAB000009::I,
-    USLAB000011::I,
-    USLAB000013::I,
-    USLAB000014::I,
-    USLAB000015::I,
-    USLAB000016::I,
-    USLAB000017::I,
-    USLAB000018::I,
-    USLAB000019::I,
-    USLAB000020::I,
-    USLAB000021::I,
-    USLAB000022::I,
-    USLAB000023::I,
-    USLAB000024::I,
-    USLAB000025::I,
-    USLAB000026::I,
-    USLAB000027::I,
-    USLAB000028::I,
-    USLAB000029::I,
-    USLAB000030::I,
-    USLAB000031::I,
-    USLAB000038::I,
-    USLAB000039::I,
-    USLAB000040::I,
-    USLAB000041::I,
-    USLAB000042::I,
-    USLAB000043::I,
-    USLAB000044::I,
-    USLAB000045::I,
-    USLAB000046::I,
-    USLAB000047::I,
-    USLAB000048::I,
-    USLAB000049::I,
-    USLAB000050::I,
-    USLAB000051::I,
-    USLAB000052::I,
+const ISSLSchema::Type ADCO::Set[] = {
+    ISSLSchema::TypeZ1000001,
+    ISSLSchema::TypeZ1000002,
+    ISSLSchema::TypeZ1000003,
+    ISSLSchema::TypeZ1000004,
+    ISSLSchema::TypeZ1000005,
+    ISSLSchema::TypeZ1000006,
+    ISSLSchema::TypeZ1000007,
+    ISSLSchema::TypeZ1000008,
+    ISSLSchema::TypeZ1000009,
+    ISSLSchema::TypeZ1000010,
+    ISSLSchema::TypeZ1000011,
+    ISSLSchema::TypeZ1000012,
+    ISSLSchema::TypeUSLAB000001,
+    ISSLSchema::TypeUSLAB000002,
+    ISSLSchema::TypeUSLAB000003,
+    ISSLSchema::TypeUSLAB000004,
+    ISSLSchema::TypeUSLAB000005,
+    ISSLSchema::TypeUSLAB000006,
+    ISSLSchema::TypeUSLAB000007,
+    ISSLSchema::TypeUSLAB000008,
+    ISSLSchema::TypeUSLAB000009,
+    ISSLSchema::TypeUSLAB000011,
+    ISSLSchema::TypeUSLAB000013,
+    ISSLSchema::TypeUSLAB000014,
+    ISSLSchema::TypeUSLAB000015,
+    ISSLSchema::TypeUSLAB000016,
+    ISSLSchema::TypeUSLAB000017,
+    ISSLSchema::TypeUSLAB000018,
+    ISSLSchema::TypeUSLAB000019,
+    ISSLSchema::TypeUSLAB000020,
+    ISSLSchema::TypeUSLAB000021,
+    ISSLSchema::TypeUSLAB000022,
+    ISSLSchema::TypeUSLAB000023,
+    ISSLSchema::TypeUSLAB000024,
+    ISSLSchema::TypeUSLAB000025,
+    ISSLSchema::TypeUSLAB000026,
+    ISSLSchema::TypeUSLAB000027,
+    ISSLSchema::TypeUSLAB000028,
+    ISSLSchema::TypeUSLAB000029,
+    ISSLSchema::TypeUSLAB000030,
+    ISSLSchema::TypeUSLAB000031,
+    ISSLSchema::TypeUSLAB000038,
+    ISSLSchema::TypeUSLAB000039,
+    ISSLSchema::TypeUSLAB000040,
+    ISSLSchema::TypeUSLAB000041,
+    ISSLSchema::TypeUSLAB000042,
+    ISSLSchema::TypeUSLAB000043,
+    ISSLSchema::TypeUSLAB000044,
+    ISSLSchema::TypeUSLAB000045,
+    ISSLSchema::TypeUSLAB000046,
+    ISSLSchema::TypeUSLAB000047,
+    ISSLSchema::TypeUSLAB000048,
+    ISSLSchema::TypeUSLAB000049,
+    ISSLSchema::TypeUSLAB000050,
+    ISSLSchema::TypeUSLAB000051,
+    ISSLSchema::TypeUSLAB000052,
 };
 const uint ADCO::Count = 56
 ;
@@ -146,7 +146,8 @@ QList<ISSLSchematic> ADCO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -155,9 +156,10 @@ QString ADCO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

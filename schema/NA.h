@@ -22,7 +22,7 @@
 #include <QString>
 
 #include "ISSLConsole.h"
-#include "ISSLSchematic.h"
+#include "ISSLSchema.h"
 
 /*!
  * 
@@ -38,7 +38,7 @@ struct NA : public ISSLConsole {
     virtual QString join(const QString& sep) const;
 
  private:
-    static const ISSLSchematic Set[];
+    static const ISSLSchema::Type Set[];
     static const uint Count;
 };
 #endif

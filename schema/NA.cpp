@@ -23,9 +23,9 @@
 
 const NA NA::I;
 
-const ISSLSchematic NA::Set[] = {
-    TIME_000001::I,
-    TIME_000002::I,
+const ISSLSchema::Type NA::Set[] = {
+    ISSLSchema::TypeTIME_000001,
+    ISSLSchema::TypeTIME_000002,
 };
 const uint NA::Count = 2
 ;
@@ -38,7 +38,8 @@ QList<ISSLSchematic> NA::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -47,9 +48,10 @@ QString NA::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

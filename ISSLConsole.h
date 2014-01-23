@@ -68,6 +68,10 @@ struct ISSLConsole {
 
     static const ISSLConsole& For(Type type);
 
+    static QList<ISSLConsole::Type> Types();
+
+    static QList<QString> Names();
+
     const char* name;
 
     ISSLConsole(const char* name);

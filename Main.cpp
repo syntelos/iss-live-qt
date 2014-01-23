@@ -15,6 +15,10 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cstring>
+#include <iostream>
+#include <QList>
+#include <QTextStream>
 
 #include "Main.h"
 
@@ -25,26 +29,17 @@ Main::Main(int argc, char** argv)
 {
     QObject::connect(issl,SIGNAL(connected(const ISSLClient&)),this,SLOT(connect(const ISSLClient&)));
     QObject::connect(issl,SIGNAL(disconnected(const ISSLClient&)),this,SLOT(disconnect(const ISSLClient&)));
-    {
-        ISSLClientCatalog* catalog = issl->getCatalog();
-
-        int argx;
-        for (argx = 0; argx < argc; argx++){
-            char* arg = argv[argx];
-            ISSLConsole::Type console = ISSLConsole::TypeOf(arg);
-            if (0 != console){
-                catalog->append(console);
-            }
-            else {
-                ISSLSchema::Type schematic = ISSLSchema::TypeOf(arg);
-                if (0 != schematic){
-                    catalog->append(schematic);
-                }
-            }
-        }
-    }
+}
+ISSLClient* Main::getClient(){
+    return issl;
+}
+ISSLClientCatalog* Main::getCatalog(){
+    return issl->getCatalog();
+}
+void Main::connect(){
     issl->connect();
-
+}
+void Main::open(){
     issl->open();
 }
 void Main::connect(const ISSLClient& issl){
@@ -72,6 +67,61 @@ int main(int argc, char** argv){
     /*
      */
     Main main(argc, argv);
+
+    ISSLClientCatalog* catalog = main.getCatalog();
+
+    int argx;
+    for (argx = 0; argx < argc; argx++){
+        char* arg = argv[argx];
+        ISSLConsole::Type console = ISSLConsole::TypeOf(arg);
+        if (0 != console){
+            catalog->append(console);
+        }
+        else {
+            ISSLSchema::Type schematic = ISSLSchema::TypeOf(arg);
+            if (0 != schematic){
+                catalog->append(schematic);
+            }
+            else if (0 == strcmp("?",arg)){
+                QTextStream out(stdout);
+
+                bool query = true;
+
+                argx += 1;
+                for (; argx < argc; argx++){
+                    arg = argv[argx];
+                    console = ISSLConsole::TypeOf(arg);
+                    if (0 != console){
+                        query = false;
+                        const ISSLConsole& consoleObject = ISSLConsole::For(console);
+
+                        out << consoleObject.name << endl;
+                        
+                        QList<ISSLSchematic> members = consoleObject.schematic();
+                        foreach (const ISSLSchematic& member, members){
+                            out << member.name << "\t" << member.desc_short;
+                            if (0 == strcmp("enum",member.formattype)){
+                                out << "\t[" << member.format << ']' << endl;
+                            }
+                            out << endl;
+                        }
+                    }
+                }
+
+                if (query){
+                    QList<QString> consoles = ISSLConsole::Names();
+                    foreach(const QString& name, consoles){
+                        out << name << endl;
+                    }
+                }
+                return 1;
+            }
+        }
+    }
+
+    main.connect();
+
+    main.open();
 
     return main.a->exec();
 }

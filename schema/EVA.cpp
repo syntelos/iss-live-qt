@@ -69,55 +69,55 @@
 
 const EVA EVA::I;
 
-const ISSLSchematic EVA::Set[] = {
-    AIRLOCK000001::I,
-    AIRLOCK000002::I,
-    AIRLOCK000003::I,
-    AIRLOCK000004::I,
-    AIRLOCK000005::I,
-    AIRLOCK000006::I,
-    AIRLOCK000007::I,
-    AIRLOCK000008::I,
-    AIRLOCK000009::I,
-    AIRLOCK000010::I,
-    AIRLOCK000011::I,
-    AIRLOCK000012::I,
-    AIRLOCK000013::I,
-    AIRLOCK000014::I,
-    AIRLOCK000015::I,
-    AIRLOCK000016::I,
-    AIRLOCK000017::I,
-    AIRLOCK000018::I,
-    AIRLOCK000019::I,
-    AIRLOCK000020::I,
-    AIRLOCK000021::I,
-    AIRLOCK000022::I,
-    AIRLOCK000023::I,
-    AIRLOCK000024::I,
-    AIRLOCK000025::I,
-    AIRLOCK000026::I,
-    AIRLOCK000027::I,
-    AIRLOCK000028::I,
-    AIRLOCK000029::I,
-    AIRLOCK000030::I,
-    AIRLOCK000031::I,
-    AIRLOCK000032::I,
-    AIRLOCK000033::I,
-    AIRLOCK000034::I,
-    AIRLOCK000035::I,
-    AIRLOCK000036::I,
-    AIRLOCK000037::I,
-    AIRLOCK000038::I,
-    AIRLOCK000039::I,
-    AIRLOCK000040::I,
-    AIRLOCK000041::I,
-    AIRLOCK000042::I,
-    AIRLOCK000043::I,
-    AIRLOCK000044::I,
-    AIRLOCK000045::I,
-    AIRLOCK000046::I,
-    AIRLOCK000047::I,
-    AIRLOCK000048::I,
+const ISSLSchema::Type EVA::Set[] = {
+    ISSLSchema::TypeAIRLOCK000001,
+    ISSLSchema::TypeAIRLOCK000002,
+    ISSLSchema::TypeAIRLOCK000003,
+    ISSLSchema::TypeAIRLOCK000004,
+    ISSLSchema::TypeAIRLOCK000005,
+    ISSLSchema::TypeAIRLOCK000006,
+    ISSLSchema::TypeAIRLOCK000007,
+    ISSLSchema::TypeAIRLOCK000008,
+    ISSLSchema::TypeAIRLOCK000009,
+    ISSLSchema::TypeAIRLOCK000010,
+    ISSLSchema::TypeAIRLOCK000011,
+    ISSLSchema::TypeAIRLOCK000012,
+    ISSLSchema::TypeAIRLOCK000013,
+    ISSLSchema::TypeAIRLOCK000014,
+    ISSLSchema::TypeAIRLOCK000015,
+    ISSLSchema::TypeAIRLOCK000016,
+    ISSLSchema::TypeAIRLOCK000017,
+    ISSLSchema::TypeAIRLOCK000018,
+    ISSLSchema::TypeAIRLOCK000019,
+    ISSLSchema::TypeAIRLOCK000020,
+    ISSLSchema::TypeAIRLOCK000021,
+    ISSLSchema::TypeAIRLOCK000022,
+    ISSLSchema::TypeAIRLOCK000023,
+    ISSLSchema::TypeAIRLOCK000024,
+    ISSLSchema::TypeAIRLOCK000025,
+    ISSLSchema::TypeAIRLOCK000026,
+    ISSLSchema::TypeAIRLOCK000027,
+    ISSLSchema::TypeAIRLOCK000028,
+    ISSLSchema::TypeAIRLOCK000029,
+    ISSLSchema::TypeAIRLOCK000030,
+    ISSLSchema::TypeAIRLOCK000031,
+    ISSLSchema::TypeAIRLOCK000032,
+    ISSLSchema::TypeAIRLOCK000033,
+    ISSLSchema::TypeAIRLOCK000034,
+    ISSLSchema::TypeAIRLOCK000035,
+    ISSLSchema::TypeAIRLOCK000036,
+    ISSLSchema::TypeAIRLOCK000037,
+    ISSLSchema::TypeAIRLOCK000038,
+    ISSLSchema::TypeAIRLOCK000039,
+    ISSLSchema::TypeAIRLOCK000040,
+    ISSLSchema::TypeAIRLOCK000041,
+    ISSLSchema::TypeAIRLOCK000042,
+    ISSLSchema::TypeAIRLOCK000043,
+    ISSLSchema::TypeAIRLOCK000044,
+    ISSLSchema::TypeAIRLOCK000045,
+    ISSLSchema::TypeAIRLOCK000046,
+    ISSLSchema::TypeAIRLOCK000047,
+    ISSLSchema::TypeAIRLOCK000048,
 };
 const uint EVA::Count = 48
 ;
@@ -130,7 +130,8 @@ QList<ISSLSchematic> EVA::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -139,9 +140,10 @@ QString EVA::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

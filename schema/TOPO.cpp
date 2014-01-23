@@ -28,14 +28,14 @@
 
 const TOPO TOPO::I;
 
-const ISSLSchematic TOPO::Set[] = {
-    USLAB000032::I,
-    USLAB000033::I,
-    USLAB000034::I,
-    USLAB000035::I,
-    USLAB000036::I,
-    USLAB000037::I,
-    USLAB000102::I,
+const ISSLSchema::Type TOPO::Set[] = {
+    ISSLSchema::TypeUSLAB000032,
+    ISSLSchema::TypeUSLAB000033,
+    ISSLSchema::TypeUSLAB000034,
+    ISSLSchema::TypeUSLAB000035,
+    ISSLSchema::TypeUSLAB000036,
+    ISSLSchema::TypeUSLAB000037,
+    ISSLSchema::TypeUSLAB000102,
 };
 const uint TOPO::Count = 7
 ;
@@ -48,7 +48,8 @@ QList<ISSLSchematic> TOPO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -57,9 +58,10 @@ QString TOPO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

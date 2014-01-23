@@ -20,6 +20,11 @@
 
 #include "ISSLClient.h"
 
+/**
+ * This class provides ISSL/Qt slots for connecting and disconnecting
+ * the \class QApplication quit slot with session, catalog and bind
+ * failure signals.
+ */
 class Main : public QObject {
     Q_OBJECT;
 
@@ -29,6 +34,14 @@ class Main : public QObject {
     ISSLClient* issl;
 
     Main(int argc, char** argv);
+
+    ISSLClient* getClient();
+
+    ISSLClientCatalog* getCatalog();
+
+    void connect();
+
+    void open();
 
  public slots:
 

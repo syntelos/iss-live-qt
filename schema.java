@@ -10,9 +10,19 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
+ * OPERATION
+ * 
+ * Generates the following files: ISSLSchematic.h, ISSLSchema.h,
+ * ISSLSchema.cpp, ISSLConsole.h, ISSLConsole.cpp, and all of the H
+ * and CPP files in the directory named "schema".
+ * 
+ * DESIGN NOTES
+ * 
  * Generates object class types for telemetry symbols as a possible
  * (future) point of extension.  For example in parsing upstream data
- * objects or values.
+ * objects or values.  It would be possible to use only enumerated
+ * types, at the cost of (loosing) the binding to more complex
+ * programming language objects.
  */
 public class schema
 {
@@ -422,6 +432,10 @@ public class schema
                 out.println();
                 out.println("    static const ISSLConsole& For(Type type);");
                 out.println();
+                out.println("    static QList<ISSLConsole::Type> Types();");
+                out.println();
+                out.println("    static QList<QString> Names();");
+                out.println();
                 out.println("    const char* name;");
                 out.println();
                 out.println("    ISSLConsole(const char* name);");
@@ -511,6 +525,30 @@ public class schema
                 out.println("    }");
                 out.println("}");
                 out.println();
+                out.println("QList<ISSLConsole::Type> ISSLConsole::Types(){");
+                out.println("    QList<ISSLConsole::Type> re;");
+                cc = 0;
+                for (String console: keys){
+
+                    out.printf ("    re += ISSLConsole::Type%s;%n",console);
+                    cc++;
+                }
+                out.println("    return re;");
+                out.println("}");
+                out.println();
+                out.println("QList<QString> ISSLConsole::Names(){");
+                out.println("    QList<QString> re;");
+
+                cc = 0;
+                for (String console: keys){
+
+                    out.printf ("    re.append(%s::I.name);%n",console);
+                    cc++;
+                }
+                out.println("    return re;");
+                out.println("}");
+                out.println();
+
 
                 out.close();
 
@@ -545,7 +583,7 @@ public class schema
                     out.println("#include <QString>");
                     out.println();
                     out.println("#include \"ISSLConsole.h\"");
-                    out.println("#include \"ISSLSchematic.h\"");
+                    out.println("#include \"ISSLSchema.h\"");
                     out.println();
                     out.println("/*!");
                     out.println(" * ");
@@ -561,7 +599,7 @@ public class schema
                     out.println("    virtual QString join(const QString& sep) const;");
                     out.println();
                     out.println(" private:");
-                    out.println("    static const ISSLSchematic Set[];");
+                    out.println("    static const ISSLSchema::Type Set[];");
                     out.println("    static const uint Count;");
                     out.println("};");
                     out.println("#endif");
@@ -602,14 +640,14 @@ public class schema
                     out.println();
                     out.printf ("const %s %s::I;%n",console,console);
                     out.println();
-                    out.printf ("const ISSLSchematic %s::Set[] = {%n",console);
+                    out.printf ("const ISSLSchema::Type %s::Set[] = {%n",console);
 
                     for (int ll = 0, llen = list.length, lt = (llen-1); ll < llen; ll++){
 
                         if (0 < lt)
-                            out.printf ("    %s::I,%n",list[ll].name);
+                            out.printf ("    ISSLSchema::Type%s,%n",list[ll].name);
                         else
-                            out.printf ("    %s::I%n",list[ll].name);
+                            out.printf ("    ISSLSchema::Type%s%n",list[ll].name);
                     }
                     out.println("};");
                     out.printf ("const uint %s::Count = %d%n;",console,list.length);
@@ -623,7 +661,8 @@ public class schema
                     out.println("    QList<ISSLSchematic> re;");
                     out.println("    uint cc;");
                     out.println("    for (cc = 0; cc < Count; cc++){");
-                    out.println("        re += Set[cc];");
+                    out.println("        ISSLSchematic sch = ISSLSchema::For(Set[cc]);");
+                    out.println("        re += sch;");
                     out.println("    }");
                     out.println("    return re;");
                     out.println("}");
@@ -632,9 +671,10 @@ public class schema
                     out.println("    QString re;");
                     out.println("    uint cc;");
                     out.println("    for (cc = 0; cc < Count; cc++){");
+                    out.println("        ISSLSchematic sch = ISSLSchema::For(Set[cc]);");
                     out.println("        if (0 != cc)");
                     out.println("            re += sep;");
-                    out.println("        re += Set[cc].name;");
+                    out.println("        re += sch.name;");
                     out.println("    }");
                     out.println("    return re;");
                     out.println("}");

@@ -64,50 +64,50 @@
 
 const ETHOS ETHOS::I;
 
-const ISSLSchematic ETHOS::Set[] = {
-    NODE2000001::I,
-    NODE2000002::I,
-    NODE2000003::I,
-    NODE2000006::I,
-    NODE2000007::I,
-    NODE3000001::I,
-    NODE3000002::I,
-    NODE3000003::I,
-    NODE3000004::I,
-    NODE3000005::I,
-    NODE3000006::I,
-    NODE3000007::I,
-    NODE3000008::I,
-    NODE3000009::I,
-    NODE3000010::I,
-    NODE3000011::I,
-    NODE3000012::I,
-    NODE3000013::I,
-    NODE3000017::I,
-    NODE3000018::I,
-    NODE3000019::I,
-    AIRLOCK000049::I,
-    AIRLOCK000050::I,
-    AIRLOCK000051::I,
-    AIRLOCK000052::I,
-    AIRLOCK000053::I,
-    AIRLOCK000054::I,
-    AIRLOCK000055::I,
-    AIRLOCK000056::I,
-    AIRLOCK000057::I,
-    USLAB000053::I,
-    USLAB000054::I,
-    USLAB000055::I,
-    USLAB000056::I,
-    USLAB000057::I,
-    USLAB000058::I,
-    USLAB000059::I,
-    USLAB000060::I,
-    USLAB000061::I,
-    USLAB000062::I,
-    USLAB000063::I,
-    USLAB000064::I,
-    USLAB000065::I,
+const ISSLSchema::Type ETHOS::Set[] = {
+    ISSLSchema::TypeNODE2000001,
+    ISSLSchema::TypeNODE2000002,
+    ISSLSchema::TypeNODE2000003,
+    ISSLSchema::TypeNODE2000006,
+    ISSLSchema::TypeNODE2000007,
+    ISSLSchema::TypeNODE3000001,
+    ISSLSchema::TypeNODE3000002,
+    ISSLSchema::TypeNODE3000003,
+    ISSLSchema::TypeNODE3000004,
+    ISSLSchema::TypeNODE3000005,
+    ISSLSchema::TypeNODE3000006,
+    ISSLSchema::TypeNODE3000007,
+    ISSLSchema::TypeNODE3000008,
+    ISSLSchema::TypeNODE3000009,
+    ISSLSchema::TypeNODE3000010,
+    ISSLSchema::TypeNODE3000011,
+    ISSLSchema::TypeNODE3000012,
+    ISSLSchema::TypeNODE3000013,
+    ISSLSchema::TypeNODE3000017,
+    ISSLSchema::TypeNODE3000018,
+    ISSLSchema::TypeNODE3000019,
+    ISSLSchema::TypeAIRLOCK000049,
+    ISSLSchema::TypeAIRLOCK000050,
+    ISSLSchema::TypeAIRLOCK000051,
+    ISSLSchema::TypeAIRLOCK000052,
+    ISSLSchema::TypeAIRLOCK000053,
+    ISSLSchema::TypeAIRLOCK000054,
+    ISSLSchema::TypeAIRLOCK000055,
+    ISSLSchema::TypeAIRLOCK000056,
+    ISSLSchema::TypeAIRLOCK000057,
+    ISSLSchema::TypeUSLAB000053,
+    ISSLSchema::TypeUSLAB000054,
+    ISSLSchema::TypeUSLAB000055,
+    ISSLSchema::TypeUSLAB000056,
+    ISSLSchema::TypeUSLAB000057,
+    ISSLSchema::TypeUSLAB000058,
+    ISSLSchema::TypeUSLAB000059,
+    ISSLSchema::TypeUSLAB000060,
+    ISSLSchema::TypeUSLAB000061,
+    ISSLSchema::TypeUSLAB000062,
+    ISSLSchema::TypeUSLAB000063,
+    ISSLSchema::TypeUSLAB000064,
+    ISSLSchema::TypeUSLAB000065,
 };
 const uint ETHOS::Count = 43
 ;
@@ -120,7 +120,8 @@ QList<ISSLSchematic> ETHOS::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -129,9 +130,10 @@ QString ETHOS::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }

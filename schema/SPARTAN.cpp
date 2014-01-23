@@ -51,37 +51,37 @@
 
 const SPARTAN SPARTAN::I;
 
-const ISSLSchematic SPARTAN::Set[] = {
-    P1000001::I,
-    P1000002::I,
-    P1000003::I,
-    P4000001::I,
-    P4000002::I,
-    P4000004::I,
-    P4000005::I,
-    P4000007::I,
-    P4000008::I,
-    P6000001::I,
-    P6000002::I,
-    P6000004::I,
-    P6000005::I,
-    P6000007::I,
-    P6000008::I,
-    S1000001::I,
-    S1000002::I,
-    S1000003::I,
-    S4000001::I,
-    S4000002::I,
-    S4000004::I,
-    S4000005::I,
-    S4000007::I,
-    S4000008::I,
-    S6000001::I,
-    S6000002::I,
-    S6000004::I,
-    S6000005::I,
-    S6000007::I,
-    S6000008::I,
+const ISSLSchema::Type SPARTAN::Set[] = {
+    ISSLSchema::TypeP1000001,
+    ISSLSchema::TypeP1000002,
+    ISSLSchema::TypeP1000003,
+    ISSLSchema::TypeP4000001,
+    ISSLSchema::TypeP4000002,
+    ISSLSchema::TypeP4000004,
+    ISSLSchema::TypeP4000005,
+    ISSLSchema::TypeP4000007,
+    ISSLSchema::TypeP4000008,
+    ISSLSchema::TypeP6000001,
+    ISSLSchema::TypeP6000002,
+    ISSLSchema::TypeP6000004,
+    ISSLSchema::TypeP6000005,
+    ISSLSchema::TypeP6000007,
+    ISSLSchema::TypeP6000008,
+    ISSLSchema::TypeS1000001,
+    ISSLSchema::TypeS1000002,
+    ISSLSchema::TypeS1000003,
+    ISSLSchema::TypeS4000001,
+    ISSLSchema::TypeS4000002,
+    ISSLSchema::TypeS4000004,
+    ISSLSchema::TypeS4000005,
+    ISSLSchema::TypeS4000007,
+    ISSLSchema::TypeS4000008,
+    ISSLSchema::TypeS6000001,
+    ISSLSchema::TypeS6000002,
+    ISSLSchema::TypeS6000004,
+    ISSLSchema::TypeS6000005,
+    ISSLSchema::TypeS6000007,
+    ISSLSchema::TypeS6000008,
 };
 const uint SPARTAN::Count = 30
 ;
@@ -94,7 +94,8 @@ QList<ISSLSchematic> SPARTAN::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
-        re += Set[cc];
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
+        re += sch;
     }
     return re;
 }
@@ -103,9 +104,10 @@ QString SPARTAN::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
+        ISSLSchematic sch = ISSLSchema::For(Set[cc]);
         if (0 != cc)
             re += sep;
-        re += Set[cc].name;
+        re += sch.name;
     }
     return re;
 }
