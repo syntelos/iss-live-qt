@@ -15,13 +15,15 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
 #include <QDebug>
+#include <QTextStream>
 
 #include "ISSLClientData.h"
-#include "ISSLClientDataChunk.h"
+
 
 ISSLClientData::ISSLClientData(HTTPStreamClient* n, ISSLClientSession* s)
-    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/bind_session.js"), los(true)
+    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/bind_session.js"), blos(true)
 {
 }
 ISSLClientData::~ISSLClientData()
@@ -33,10 +35,10 @@ ISSLClientData::~ISSLClientData()
     }
 }
 bool ISSLClientData::hasSignal(){
-    return (!los);
+    return (!blos);
 }
 bool ISSLClientData::hasNotSignal(){
-    return los;
+    return blos;
 }
 void ISSLClientData::io(){
     qbody.clear();
@@ -82,29 +84,28 @@ void ISSLClientData::ready(){
 
         if (0 < data.size()){
             initialization = 0;
-            los = false;
+            if (blos){
+                blos = false;
 
-            foreach (ISSLClientDataChunkPair pair, data){
-
-                qDebug().nospace() << pair.name.constData() << "=" << pair.value.constData();
+                emit aos();
             }
 
-            // (emit received)
+            emit received(data);
         }
         else if (data.input.startsWith("p();"))
         {
-            los = true;
-            qDebug() << "LOS";
+            if (!blos){
+                blos = true;
+
+                emit los();
+            }
         }
         else if (data.input.startsWith("loop(0);"))
         {
             delete rep;
             rep = 0;
 
-            qDebug() << "EOL";
-
-            emit failure();
-
+            emit eol();
             return;
         }
         else if (data.input.startsWith("var ") ||
@@ -114,8 +115,6 @@ void ISSLClientData::ready(){
 
                 delete rep;
                 rep = 0;
-
-                qDebug() << "ISSLClientData.ready [failure]: INIT";
 
                 emit failure();
 
@@ -127,7 +126,7 @@ void ISSLClientData::ready(){
         }
         else {
 
-            qDebug() << "ISSLClientData.ready [failure]: " << data.input;
+            // qDebug() << "ISSLClientData.ready [failure]: " << data.input;
 
             delete rep;
             rep = 0;
@@ -147,12 +146,42 @@ void ISSLClientData::error(){
         delete rep;
         rep = 0;
 
-        qDebug() << "ISSLClientData.error: HTTP" << status << msg;
+        // qDebug() << "ISSLClientData.error: HTTP" << status << msg;
     }
     else {
-        qDebug() << "ISSLClientData.error: HTTP";
+        // qDebug() << "ISSLClientData.error: HTTP";
     }
 
     emit failure();
 }
+void ISSLClientData::print(const QList<ISSLClientDataChunkPair>& list){
+    const int count = list.size();
+    int cc;
+    QTextStream out(stdout);
 
+    for(cc = 0; cc < count; cc++){
+
+        const ISSLClientDataChunkPair& pair = list.at(cc);
+
+        if (0 < cc){
+            out << ' ';
+        }
+        out << pair.name.constData();
+        out << "=";
+        out << pair.value.constData();
+    }
+
+    out << endl;
+}
+void ISSLClientData::printLOS(){
+
+    QTextStream out(stdout);
+
+    out << "LOS" << endl;
+}
+void ISSLClientData::printAOS(){
+
+    QTextStream out(stdout);
+
+    out << "AOS" << endl;
+}

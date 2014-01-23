@@ -35,20 +35,31 @@ int main(int argc, char** argv){
 
     QApplication a(argc, argv);
 
+
     HTTPStreamClient* net = new HTTPStreamClient();
+
 
     QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),net,SLOT(printSocketError(QAbstractSocket::SocketError)));
     QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),&a,SLOT(quit()));
 
+
     ISSLClientSession* session = new ISSLClientSession(net);
     ISSLClientCatalog* ctrl = new ISSLClientCatalog(net,session);
     ISSLClientData* bind = new ISSLClientData(net,session);
+
 
     QObject::connect(net,SIGNAL(connected()),session,SLOT(io()));
 
     QObject::connect(session,SIGNAL(success()),ctrl,SLOT(io()));
 
     QObject::connect(ctrl,SIGNAL(success()),bind,SLOT(io()));
+
+
+    QObject::connect(bind,SIGNAL(received(const QList<ISSLClientDataChunkPair>&)),bind,SLOT(print(const QList<ISSLClientDataChunkPair>&)));
+
+    QObject::connect(bind,SIGNAL(los()),bind,SLOT(printLOS()));
+
+    QObject::connect(bind,SIGNAL(aos()),bind,SLOT(printAOS()));
 
 
     QObject::connect(session,SIGNAL(failure()),&a,SLOT(quit()));
@@ -58,7 +69,7 @@ int main(int argc, char** argv){
     QObject::connect(bind,SIGNAL(failure()),&a,SLOT(quit()));
 
 
-    net->connectToHost(ISSLClient::HOST,ISSLClient::PORT);
+    net->connectToHost(ISSLClientIO::HOST,ISSLClientIO::PORT);
 
     return a.exec();
 }

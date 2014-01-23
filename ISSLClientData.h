@@ -19,11 +19,12 @@
 #define _ISSL_ISSLClientData_H
 
 #include "ISSLClientSession.h"
+#include "ISSLClientDataChunk.h"
 
 /*!
  * 
  */
-class ISSLClientData : public ISSLClient {
+class ISSLClientData : public ISSLClientIO {
     Q_OBJECT;
 
     HTTPStreamClient* net;
@@ -31,7 +32,7 @@ class ISSLClientData : public ISSLClient {
     HTTPStreamResponse* rep;
     QByteArray qbody;
     QVariant path;
-    volatile bool los;
+    volatile bool blos;
 
  public:
     ISSLClientData(HTTPStreamClient*,ISSLClientSession*);
@@ -43,10 +44,19 @@ class ISSLClientData : public ISSLClient {
  signals:
     void success();
     void failure();
+    void aos();
+    void los();
+    void eol();
+    void received(const QList<ISSLClientDataChunkPair>&);
+
 
  public slots:
-     virtual void io();
-     void error();
+    virtual void io();
+    void error();
+    void print(const QList<ISSLClientDataChunkPair>&);
+    void printLOS();
+    void printAOS();
+
 
  private:
      void ready();

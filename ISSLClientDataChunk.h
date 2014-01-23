@@ -21,7 +21,7 @@
 #include <QList>
 
 #include "HTTPStreamChunk.h"
-#include "ISSLClient.h"
+#include "ISSLClientIO.h"
 
 /*!
  * 

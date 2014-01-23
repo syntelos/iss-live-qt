@@ -31,7 +31,7 @@
  * \sa ISSLClientCatalog
  * \sa ISSLClientData
  */
-class ISSLClient : public QObject {
+class ISSLClientIO : public QObject {
 
  public:
     static const char* HOST;

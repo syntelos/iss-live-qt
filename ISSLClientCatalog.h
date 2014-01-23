@@ -23,7 +23,7 @@
 /*!
  * 
  */
-class ISSLClientCatalog : public ISSLClient {
+class ISSLClientCatalog : public ISSLClientIO {
     Q_OBJECT;
 
     HTTPStreamClient* net;

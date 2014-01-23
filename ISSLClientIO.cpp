@@ -16,14 +16,12 @@
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ISSLClient.h"
+#include "ISSLClientIO.h"
 
-const char* ISSLClient::HOST = "push1.jsc.nasa.gov";
-const int ISSLClient::PORT = 80;
-//const char* ISSLClient::HOST = "192.168.1.3";
-//const int   ISSLClient::PORT = 8080;
-const char* ISSLClient::FORM = "application/x-www-form-urlencoded";
-const char* ISSLClient::CONN = "Connection";
-const char* ISSLClient::CONN_KEAL = "keep-alive";
-const char* ISSLClient::USER = "User-Agent";
-const char* ISSLClient::USER_AGENT = "Syntelos-ISS-Live/1.0";
+const char* ISSLClientIO::HOST = "push1.jsc.nasa.gov";
+const int ISSLClientIO::PORT = 80;
+const char* ISSLClientIO::FORM = "application/x-www-form-urlencoded";
+const char* ISSLClientIO::CONN = "Connection";
+const char* ISSLClientIO::CONN_KEAL = "keep-alive";
+const char* ISSLClientIO::USER = "User-Agent";
+const char* ISSLClientIO::USER_AGENT = "Syntelos-ISS-Live/1.0";

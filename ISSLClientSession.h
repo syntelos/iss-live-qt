@@ -18,12 +18,12 @@
 #ifndef _ISSL_ISSLClientSession_H
 #define _ISSL_ISSLClientSession_H
 
-#include "ISSLClient.h"
+#include "ISSLClientIO.h"
 
 /*!
  * 
  */
-class ISSLClientSession : public ISSLClient {
+class ISSLClientSession : public ISSLClientIO {
     Q_OBJECT;
 
     HTTPStreamClient* net;
