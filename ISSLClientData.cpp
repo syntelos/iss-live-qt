@@ -68,7 +68,7 @@ void ISSLClientData::ready(){
     int status = rep->status.toInt();
     QString msg = rep->message.toString();
 
-    qDebug() << "ISSLClientData.ready: HTTP" << status << msg;
+    // qDebug() << "ISSLClientData.ready: HTTP" << status << msg;
 
     int initialization = 0;
 
@@ -101,7 +101,7 @@ void ISSLClientData::ready(){
             delete rep;
             rep = 0;
 
-            qDebug() << "ISSLClientData.ready [failure]: EOL";
+            qDebug() << "EOL";
 
             emit failure();
 

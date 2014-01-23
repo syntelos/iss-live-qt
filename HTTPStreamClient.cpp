@@ -84,7 +84,7 @@ HTTPStreamResponse* HTTPStreamClient::send(HTTPStreamRequest* q){
 
         HTTPStreamResponse* p = new HTTPStreamResponse();
 
-        qDebug() << "HTTPStreamClient.send [read]";
+        // qDebug() << "HTTPStreamClient.send [read]";
 
         p->read(this);
 

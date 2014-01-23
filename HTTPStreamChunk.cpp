@@ -80,26 +80,40 @@ void HTTPStreamChunk::read(HTTP::Device* io){
                     /*
                      * chunk-data
                      */
-                    input = io->read(len);
+                    int read = 0, remaining = len, inz;
 
-                    QBuffer::setData(input);
+                    while (0 < remaining && io->waitForReadyRead()){
 
-                    qDebug() << "HTTPStreamChunk.read [success]: size" << len;
+                        input = io->read(len);
+                        inz = input.size();
+
+                        if (0 == read){
+                            QBuffer::setData(input);
+                        }
+                        else {
+                            QBuffer::buffer().append(input);
+                        }
+
+                        read += inz;
+                        remaining -= inz;
+                    }
+
+                    // qDebug() << "HTTPStreamChunk.read [success]: size" << len;
                 }
                 else {
-                    qDebug() << "HTTPStreamChunk.read [failure]: size" << len;
+                    // qDebug() << "HTTPStreamChunk.read [failure]: size" << len;
                 }
             }
             else {
-                qDebug() << "HTTPStreamChunk.read [failure]: size ext" << chunk_llen;
+                // qDebug() << "HTTPStreamChunk.read [failure]: size ext" << chunk_llen;
             }
         }
         else {
-            qDebug() << "HTTPStreamChunk.read [failure]: read size" << line.length();
+            // qDebug() << "HTTPStreamChunk.read [failure]: read size" << line.length();
         }
     }
     else {
-        qDebug() << "HTTPStreamChunk.read [failure]: read ready";
+        // qDebug() << "HTTPStreamChunk.read [failure]: read ready";
     }
 }
 void HTTPStreamChunk::write(HTTP::Device* io){

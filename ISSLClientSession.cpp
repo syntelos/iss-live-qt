@@ -35,7 +35,7 @@ ISSLClientSession::~ISSLClientSession()
     }
 }
 void ISSLClientSession::io(){
-    qDebug() << "ISSLClientSession.io";
+    // qDebug() << "ISSLClientSession.io";
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -44,15 +44,15 @@ void ISSLClientSession::io(){
     req.setHeader(USER,USER_AGENT);
     req.setData(qbody);
 
-    qDebug() << "ISSLClientSession.io [send]";
+    // qDebug() << "ISSLClientSession.io [send]";
     rep = net->send(req);
 
     if (rep && rep->isOk()){
-        qDebug() << "ISSLClientSession.io [ready]";
+        // qDebug() << "ISSLClientSession.io [ready]";
         ready();
     }
     else {
-        qDebug() << "ISSLClientSession.io [error]";
+        // qDebug() << "ISSLClientSession.io [error]";
         error();
     }
 }
@@ -60,7 +60,7 @@ void ISSLClientSession::ready(){
     int status = rep->status.toInt();
     QString msg = rep->message.toString();
 
-    qDebug() << "ISSLClientSession.ready HTTP" << status << msg;
+    // qDebug() << "ISSLClientSession.ready HTTP" << status << msg;
 
     int len = rep->getContentLength();
     if (0 < len){
@@ -73,24 +73,24 @@ void ISSLClientSession::ready(){
                 QByteArray p1 = p0.mid(0,parse);
                 this->session += p1;
 
-                qDebug() << "ISSLClientSession [success]:" << this->session;
+                // qDebug() << "ISSLClientSession [success]:" << this->session;
 
                 emit success();
             }
             else {
-                qDebug() << "ISSLClientSession [failure]: missing start (parse end) in:" << pbody;
+                // qDebug() << "ISSLClientSession [failure]: missing start (parse end) in:" << pbody;
 
                 emit failure();
             }
         }
         else {
-            qDebug() << "ISSLClientSession [failure]: missing start (parse begin) in:" << pbody;
+            // qDebug() << "ISSLClientSession [failure]: missing start (parse begin) in:" << pbody;
 
             emit failure();
         }
     }
     else {
-        qDebug() << "ISSLClientSession [failure]: content length" << len;
+        // qDebug() << "ISSLClientSession [failure]: content length" << len;
 
         emit failure();
     }
@@ -104,10 +104,10 @@ void ISSLClientSession::error(){
         delete rep;
         rep = 0;
 
-        qDebug() << "ISSLClientSession.error: HTTP" << status << msg;
+        // qDebug() << "ISSLClientSession.error: HTTP" << status << msg;
     }
     else {
-        qDebug() << "ISSLClientSession.error";
+        // qDebug() << "ISSLClientSession.error";
     }
 
     emit failure();
