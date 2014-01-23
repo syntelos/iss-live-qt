@@ -32,7 +32,7 @@ bool HTTPStreamClient::isOpen(){
 }
 bool HTTPStreamClient::waitForReadyRead(){
 
-    return QTcpSocket::waitForReadyRead();
+    return (QTcpSocket::isOpen() && QTcpSocket::waitForReadyRead());
 }
 QByteArray HTTPStreamClient::readLine(){
 

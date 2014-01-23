@@ -64,6 +64,8 @@ void ISSLClient::disablePrinting(){
 }
 void ISSLClient::connect(){
 
+    QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(reconnect()));
+
     if (printing){
 
         QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),net,SLOT(printSocketError(QAbstractSocket::SocketError)));
@@ -95,6 +97,8 @@ void ISSLClient::open(){
     emit opened(this);
 }
 void ISSLClient::disconnect(){
+
+    QObject::disconnect(net,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(reconnect()));
 
     if (printing){
 

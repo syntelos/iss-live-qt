@@ -32,8 +32,6 @@ Main::Main(int argc, char** argv)
 }
 void Main::connect(const ISSLClient& issl){
 
-    QObject::connect(issl.getClient(),SIGNAL(error(QAbstractSocket::SocketError)),a,SLOT(quit()));
-
     QObject::connect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
 
     QObject::connect(issl.getCatalog(),SIGNAL(failure()),a,SLOT(quit()));
@@ -41,8 +39,6 @@ void Main::connect(const ISSLClient& issl){
     QObject::connect(issl.getBind(),SIGNAL(failure()),a,SLOT(quit()));
 }
 void Main::disconnect(const ISSLClient& issl){
-
-    QObject::disconnect(issl.getClient(),SIGNAL(error(QAbstractSocket::SocketError)),a,SLOT(quit()));
 
     QObject::disconnect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
 
@@ -56,7 +52,8 @@ int main(int argc, char** argv){
     QCoreApplication::setOrganizationName("syntelos");
     QCoreApplication::setOrganizationDomain("syntelos.com");
     QCoreApplication::setApplicationName("iss-live");
-
+    /*
+     */
     Main main(argc, argv);
 
     return main.a->exec();
