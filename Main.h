@@ -25,15 +25,14 @@
  * the \class QApplication quit slot with session, catalog and bind
  * failure signals.
  */
-class Main : public QObject {
+class Main : public QApplication {
     Q_OBJECT;
 
  public:
 
-    QApplication* a;
     ISSLClient* issl;
 
-    Main(int argc, char** argv);
+    Main(int,char**);
 
     ISSLClient* getClient();
 

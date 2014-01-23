@@ -17,6 +17,7 @@
  */
 #include <cstring>
 #include <iostream>
+#include <QApplication>
 #include <QList>
 #include <QTextStream>
 
@@ -24,8 +25,7 @@
 
 
 Main::Main(int argc, char** argv)
-    : a(new QApplication(argc, argv)),
-      issl(new ISSLClient(this))
+    : QApplication(argc,argv), issl(new ISSLClient(this))
 {
     QObject::connect(issl,SIGNAL(connected(const ISSLClient&)),this,SLOT(connect(const ISSLClient&)));
     QObject::connect(issl,SIGNAL(disconnected(const ISSLClient&)),this,SLOT(disconnect(const ISSLClient&)));
@@ -44,29 +44,26 @@ void Main::open(){
 }
 void Main::connect(const ISSLClient& issl){
 
-    QObject::connect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::connect(issl.getSession(),SIGNAL(failure()),this,SLOT(quit()));
 
-    QObject::connect(issl.getCatalog(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::connect(issl.getCatalog(),SIGNAL(failure()),this,SLOT(quit()));
 
-    QObject::connect(issl.getBind(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::connect(issl.getBind(),SIGNAL(failure()),this,SLOT(quit()));
 }
 void Main::disconnect(const ISSLClient& issl){
 
-    QObject::disconnect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::disconnect(issl.getSession(),SIGNAL(failure()),this,SLOT(quit()));
 
-    QObject::disconnect(issl.getCatalog(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::disconnect(issl.getCatalog(),SIGNAL(failure()),this,SLOT(quit()));
 
-    QObject::disconnect(issl.getBind(),SIGNAL(failure()),a,SLOT(quit()));
+    QObject::disconnect(issl.getBind(),SIGNAL(failure()),this,SLOT(quit()));
 }
 
 
 int main(int argc, char** argv){
-    QCoreApplication::setOrganizationName("syntelos");
-    QCoreApplication::setOrganizationDomain("syntelos.com");
-    QCoreApplication::setApplicationName("iss-live");
     /*
      */
-    Main main(argc, argv);
+    Main main(argc,argv);
 
     int argx;
     for (argx = 0; argx < argc; argx++){
@@ -137,5 +134,5 @@ int main(int argc, char** argv){
 
     main.open();
 
-    return main.a->exec();
+    return main.exec();
 }
