@@ -20,7 +20,9 @@
 #include "ISSLClientCatalog.h"
 
 ISSLClientCatalog::ISSLClientCatalog(HTTPStreamClient* n, ISSLClientSession* s)
-    : ISSLClientIO(n), net(n), session(s), rep(0), qbody(), path("/lightstreamer/control.js")
+    : ISSLClientIO(n), QList(),
+      net(n), session(s), rep(0), 
+      qbody(), path("/lightstreamer/control.js")
 {
 }
 ISSLClientCatalog::~ISSLClientCatalog()
@@ -31,13 +33,73 @@ ISSLClientCatalog::~ISSLClientCatalog()
         rep = 0;
     }
 }
+void ISSLClientCatalog::append(const ISSLConsole& console){
+
+    QList::append(console.schematic());
+}
+void ISSLClientCatalog::append(ISSLConsole::Type type){
+    if (0 != type)
+        ISSLClientCatalog::append(ISSLConsole::For(type));
+}
+void ISSLClientCatalog::append(ISSLSchema::Type type){
+    if (0 != type)
+        QList::append(ISSLSchema::For(type));
+}
+QByteArray ISSLClientCatalog::join(){
+    QByteArray re;
+    const int count = QList::size();
+    int cc;
+    for (cc = 0; cc < count; cc++){
+        if (0 != cc)
+            re += "%20";
+
+        const ISSLSchematic& sch = at(cc);
+
+        re += sch.name;
+    }
+    return re;
+}
+QByteArray ISSLClientCatalog::join(const QByteArray& sep){
+    QByteArray re;
+    const int count = QList::size();
+    int cc;
+    for (cc = 0; cc < count; cc++){
+        if (0 != cc)
+            re += sep;
+
+        const ISSLSchematic& sch = at(cc);
+
+        re += sch.name;
+    }
+    return re;
+}
+QString ISSLClientCatalog::join(const QString& sep){
+    QString re;
+    const int count = QList::size();
+    int cc;
+    for (cc = 0; cc < count; cc++){
+        if (0 != cc)
+            re += sep;
+
+        const ISSLSchematic& sch = at(cc);
+
+        re += sch.name;
+    }
+    return re;
+}
 void ISSLClientCatalog::io(){
 
     qbody.clear();
     qbody += "LS_session=";
     qbody += session->session;
     qbody += "&LS_table=2&LS_win_phase=49&LS_req_phase=172&LS_op=add&LS_mode=MERGE&LS_id=ISPWebItem&LS_schema=";
-    qbody += "TIME_000001%20TIME_000002";
+
+    QByteArray catalog = join();
+    if (catalog.isEmpty())
+        qbody += "TIME_000001%20TIME_000002";
+    else
+        qbody += catalog;
+
     qbody += "&LS_snapshot=true&LS_unique=1&";
 
 

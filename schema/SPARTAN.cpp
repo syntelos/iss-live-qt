@@ -90,7 +90,7 @@ SPARTAN::SPARTAN()
 {
 }
 
-QList<ISSLSchematic> SPARTAN::schematic(){
+QList<ISSLSchematic> SPARTAN::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -99,7 +99,7 @@ QList<ISSLSchematic> SPARTAN::schematic(){
     return re;
 }
 
-QString SPARTAN::join(const QString& sep){
+QString SPARTAN::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

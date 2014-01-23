@@ -60,5 +60,8 @@ class HTTPStreamClient : public QTcpSocket, public HTTP::Device {
 
  public slots:
      void printSocketError(QAbstractSocket::SocketError);
+
+ private:
+     Q_DISABLE_COPY(HTTPStreamClient);
 };
 #endif

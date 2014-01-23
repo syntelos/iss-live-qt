@@ -142,7 +142,7 @@ ADCO::ADCO()
 {
 }
 
-QList<ISSLSchematic> ADCO::schematic(){
+QList<ISSLSchematic> ADCO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -151,7 +151,7 @@ QList<ISSLSchematic> ADCO::schematic(){
     return re;
 }
 
-QString ADCO::join(const QString& sep){
+QString ADCO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

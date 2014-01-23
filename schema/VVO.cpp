@@ -58,7 +58,7 @@ VVO::VVO()
 {
 }
 
-QList<ISSLSchematic> VVO::schematic(){
+QList<ISSLSchematic> VVO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -67,7 +67,7 @@ QList<ISSLSchematic> VVO::schematic(){
     return re;
 }
 
-QString VVO::join(const QString& sep){
+QString VVO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

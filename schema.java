@@ -426,9 +426,9 @@ public class schema
                 out.println();
                 out.println("    ISSLConsole(const char* name);");
                 out.println();
-                out.println("    virtual QList<ISSLSchematic> schematic() = 0;");
+                out.println("    virtual QList<ISSLSchematic> schematic() const = 0;");
                 out.println();
-                out.println("    virtual QString join(const QString& sep) = 0;");
+                out.println("    virtual QString join(const QString& sep) const = 0;");
                 out.println();
                 out.println("};");
                 out.println("#endif");
@@ -556,9 +556,9 @@ public class schema
                     out.println();
                     out.printf ("    static const %s I;%n",console);
                     out.println();
-                    out.println("    virtual QList<ISSLSchematic> schematic();");
+                    out.println("    virtual QList<ISSLSchematic> schematic() const;");
                     out.println();
-                    out.println("    virtual QString join(const QString& sep);");
+                    out.println("    virtual QString join(const QString& sep) const;");
                     out.println();
                     out.println(" private:");
                     out.println("    static const ISSLSchematic Set[];");
@@ -619,7 +619,7 @@ public class schema
                     out.println("{");
                     out.println("}");
                     out.println();
-                    out.printf ("QList<ISSLSchematic> %s::schematic(){%n",console);
+                    out.printf ("QList<ISSLSchematic> %s::schematic() const {%n",console);
                     out.println("    QList<ISSLSchematic> re;");
                     out.println("    uint cc;");
                     out.println("    for (cc = 0; cc < Count; cc++){");
@@ -628,7 +628,7 @@ public class schema
                     out.println("    return re;");
                     out.println("}");
                     out.println();
-                    out.printf ("QString %s::join(const QString& sep){%n",console);
+                    out.printf ("QString %s::join(const QString& sep) const {%n",console);
                     out.println("    QString re;");
                     out.println("    uint cc;");
                     out.println("    for (cc = 0; cc < Count; cc++){");

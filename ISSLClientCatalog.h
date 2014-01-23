@@ -19,11 +19,13 @@
 #define _ISSL_ISSLClientCatalog_H
 
 #include "ISSLClientSession.h"
+#include "ISSLConsole.h"
+#include "ISSLSchema.h"
 
 /*!
  * 
  */
-class ISSLClientCatalog : public ISSLClientIO {
+class ISSLClientCatalog : public ISSLClientIO, public QList<ISSLSchematic> {
     Q_OBJECT;
 
     HTTPStreamClient* net;
@@ -36,16 +38,25 @@ class ISSLClientCatalog : public ISSLClientIO {
     ISSLClientCatalog(HTTPStreamClient*,ISSLClientSession*);
     ~ISSLClientCatalog();
 
+    void append(const ISSLConsole&);
+    void append(ISSLConsole::Type);
+    void append(ISSLSchema::Type);
+
+    QByteArray join();
+    QByteArray join(const QByteArray& sep);
+    QString join(const QString& sep);
+
  signals:
     void success();
     void failure();
 
  public slots:
-     virtual void io();
-     void error();
+    virtual void io();
+    void error();
 
  private:
-     void ready();
+    void ready();
 
+    Q_DISABLE_COPY(ISSLClientCatalog);
 };
 #endif

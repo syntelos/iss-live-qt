@@ -176,7 +176,7 @@ CRONUS::CRONUS()
 {
 }
 
-QList<ISSLSchematic> CRONUS::schematic(){
+QList<ISSLSchematic> CRONUS::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -185,7 +185,7 @@ QList<ISSLSchematic> CRONUS::schematic(){
     return re;
 }
 
-QString CRONUS::join(const QString& sep){
+QString CRONUS::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

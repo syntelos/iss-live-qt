@@ -44,7 +44,7 @@ TOPO::TOPO()
 {
 }
 
-QList<ISSLSchematic> TOPO::schematic(){
+QList<ISSLSchematic> TOPO::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -53,7 +53,7 @@ QList<ISSLSchematic> TOPO::schematic(){
     return re;
 }
 
-QString TOPO::join(const QString& sep){
+QString TOPO::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

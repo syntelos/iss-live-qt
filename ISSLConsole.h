@@ -72,9 +72,9 @@ struct ISSLConsole {
 
     ISSLConsole(const char* name);
 
-    virtual QList<ISSLSchematic> schematic() = 0;
+    virtual QList<ISSLSchematic> schematic() const = 0;
 
-    virtual QString join(const QString& sep) = 0;
+    virtual QString join(const QString& sep) const = 0;
 
 };
 #endif

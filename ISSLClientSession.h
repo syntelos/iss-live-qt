@@ -42,11 +42,12 @@ class ISSLClientSession : public ISSLClientIO {
     void failure();
 
  public slots:
-     virtual void io();
-     void error();
+    virtual void io();
+    void error();
 
  private:
-     void ready();
+    void ready();
 
+    Q_DISABLE_COPY(ISSLClientSession);
 };
 #endif

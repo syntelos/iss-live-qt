@@ -25,7 +25,24 @@ Main::Main(int argc, char** argv)
 {
     QObject::connect(issl,SIGNAL(connected(const ISSLClient&)),this,SLOT(connect(const ISSLClient&)));
     QObject::connect(issl,SIGNAL(disconnected(const ISSLClient&)),this,SLOT(disconnect(const ISSLClient&)));
+    {
+        ISSLClientCatalog* catalog = issl->getCatalog();
 
+        int argx;
+        for (argx = 0; argx < argc; argx++){
+            char* arg = argv[argx];
+            ISSLConsole::Type console = ISSLConsole::TypeOf(arg);
+            if (0 != console){
+                catalog->append(console);
+            }
+            else {
+                ISSLSchema::Type schematic = ISSLSchema::TypeOf(arg);
+                if (0 != schematic){
+                    catalog->append(schematic);
+                }
+            }
+        }
+    }
     issl->connect();
 
     issl->open();

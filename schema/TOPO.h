@@ -33,9 +33,9 @@ struct TOPO : public ISSLConsole {
 
     static const TOPO I;
 
-    virtual QList<ISSLSchematic> schematic();
+    virtual QList<ISSLSchematic> schematic() const;
 
-    virtual QString join(const QString& sep);
+    virtual QString join(const QString& sep) const;
 
  private:
     static const ISSLSchematic Set[];

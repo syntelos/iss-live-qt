@@ -116,7 +116,7 @@ ETHOS::ETHOS()
 {
 }
 
-QList<ISSLSchematic> ETHOS::schematic(){
+QList<ISSLSchematic> ETHOS::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -125,7 +125,7 @@ QList<ISSLSchematic> ETHOS::schematic(){
     return re;
 }
 
-QString ETHOS::join(const QString& sep){
+QString ETHOS::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

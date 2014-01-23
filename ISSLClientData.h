@@ -59,7 +59,8 @@ class ISSLClientData : public ISSLClientIO {
 
 
  private:
-     void ready();
+    void ready();
 
+    Q_DISABLE_COPY(ISSLClientData);
 };
 #endif

@@ -34,7 +34,7 @@ NA::NA()
 {
 }
 
-QList<ISSLSchematic> NA::schematic(){
+QList<ISSLSchematic> NA::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -43,7 +43,7 @@ QList<ISSLSchematic> NA::schematic(){
     return re;
 }
 
-QString NA::join(const QString& sep){
+QString NA::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){

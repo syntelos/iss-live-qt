@@ -126,7 +126,7 @@ EVA::EVA()
 {
 }
 
-QList<ISSLSchematic> EVA::schematic(){
+QList<ISSLSchematic> EVA::schematic() const {
     QList<ISSLSchematic> re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
@@ -135,7 +135,7 @@ QList<ISSLSchematic> EVA::schematic(){
     return re;
 }
 
-QString EVA::join(const QString& sep){
+QString EVA::join(const QString& sep) const {
     QString re;
     uint cc;
     for (cc = 0; cc < Count; cc++){
