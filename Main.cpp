@@ -68,19 +68,35 @@ int main(int argc, char** argv){
      */
     Main main(argc, argv);
 
-    ISSLClientCatalog* catalog = main.getCatalog();
-
     int argx;
     for (argx = 0; argx < argc; argx++){
         char* arg = argv[argx];
         ISSLConsole::Type console = ISSLConsole::TypeOf(arg);
         if (0 != console){
-            catalog->append(console);
+            ISSLClientCatalog::append(console);
         }
         else {
             ISSLSchema::Type schematic = ISSLSchema::TypeOf(arg);
             if (0 != schematic){
-                catalog->append(schematic);
+                ISSLClientCatalog::append(schematic);
+            }
+            else if (0 == strcmp("??",arg)){
+                QTextStream out(stdout);
+
+                QList<ISSLConsole::Type> consoles = ISSLConsole::Types();
+                foreach (const ISSLConsole::Type& consoleType, consoles){
+                    const ISSLConsole& consoleObject = ISSLConsole::For(consoleType);
+
+                    QList<ISSLSchematic> members = consoleObject.schematic();
+                    foreach (const ISSLSchematic& member, members){
+                        out << consoleObject.name << "\t" << member.name << "\t" << member.desc_short;
+                        if (0 == strcmp("enum",member.formattype)){
+                            out << "\t[" << member.format << ']' << endl;
+                        }
+                        out << endl;
+                    }
+                }
+                return 1;
             }
             else if (0 == strcmp("?",arg)){
                 QTextStream out(stdout);
@@ -95,11 +111,9 @@ int main(int argc, char** argv){
                         query = false;
                         const ISSLConsole& consoleObject = ISSLConsole::For(console);
 
-                        out << consoleObject.name << endl;
-                        
                         QList<ISSLSchematic> members = consoleObject.schematic();
                         foreach (const ISSLSchematic& member, members){
-                            out << member.name << "\t" << member.desc_short;
+                            out << consoleObject.name << "\t" << member.name << "\t" << member.desc_short;
                             if (0 == strcmp("enum",member.formattype)){
                                 out << "\t[" << member.format << ']' << endl;
                             }

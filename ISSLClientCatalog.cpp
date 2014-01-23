@@ -19,8 +19,10 @@
 
 #include "ISSLClientCatalog.h"
 
+QList<ISSLSchematic> ISSLClientCatalog::catalog;
+
 ISSLClientCatalog::ISSLClientCatalog(HTTPStreamClient* n, ISSLClientSession* s)
-    : ISSLClientIO(n), QList(),
+    : ISSLClientIO(n), 
       net(n), session(s), rep(0), 
       qbody(), path("/lightstreamer/control.js")
 {
@@ -35,7 +37,7 @@ ISSLClientCatalog::~ISSLClientCatalog()
 }
 void ISSLClientCatalog::append(const ISSLConsole& console){
 
-    QList::append(console.schematic());
+    catalog.append(console.schematic());
 }
 void ISSLClientCatalog::append(ISSLConsole::Type type){
     if (0 != type)
@@ -43,17 +45,17 @@ void ISSLClientCatalog::append(ISSLConsole::Type type){
 }
 void ISSLClientCatalog::append(ISSLSchema::Type type){
     if (0 != type)
-        QList::append(ISSLSchema::For(type));
+        catalog.append(ISSLSchema::For(type));
 }
 QByteArray ISSLClientCatalog::join(){
     QByteArray re;
-    const int count = QList::size();
+    const int count = catalog.size();
     int cc;
     for (cc = 0; cc < count; cc++){
         if (0 != cc)
             re += "%20";
 
-        const ISSLSchematic& sch = at(cc);
+        const ISSLSchematic& sch = catalog.at(cc);
 
         re += sch.name;
     }
@@ -61,13 +63,13 @@ QByteArray ISSLClientCatalog::join(){
 }
 QByteArray ISSLClientCatalog::join(const QByteArray& sep){
     QByteArray re;
-    const int count = QList::size();
+    const int count = catalog.size();
     int cc;
     for (cc = 0; cc < count; cc++){
         if (0 != cc)
             re += sep;
 
-        const ISSLSchematic& sch = at(cc);
+        const ISSLSchematic& sch = catalog.at(cc);
 
         re += sch.name;
     }
@@ -75,13 +77,13 @@ QByteArray ISSLClientCatalog::join(const QByteArray& sep){
 }
 QString ISSLClientCatalog::join(const QString& sep){
     QString re;
-    const int count = QList::size();
+    const int count = catalog.size();
     int cc;
     for (cc = 0; cc < count; cc++){
         if (0 != cc)
             re += sep;
 
-        const ISSLSchematic& sch = at(cc);
+        const ISSLSchematic& sch = catalog.at(cc);
 
         re += sch.name;
     }

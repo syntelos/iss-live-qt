@@ -25,7 +25,7 @@
 /*!
  * 
  */
-class ISSLClientCatalog : public ISSLClientIO, public QList<ISSLSchematic> {
+class ISSLClientCatalog : public ISSLClientIO {
     Q_OBJECT;
 
     HTTPStreamClient* net;
@@ -34,17 +34,19 @@ class ISSLClientCatalog : public ISSLClientIO, public QList<ISSLSchematic> {
     QByteArray qbody;
     QVariant path;
 
+    static QList<ISSLSchematic> catalog;
+
  public:
     ISSLClientCatalog(HTTPStreamClient*,ISSLClientSession*);
     ~ISSLClientCatalog();
 
-    void append(const ISSLConsole&);
-    void append(ISSLConsole::Type);
-    void append(ISSLSchema::Type);
+    static void append(const ISSLConsole&);
+    static void append(ISSLConsole::Type);
+    static void append(ISSLSchema::Type);
 
-    QByteArray join();
-    QByteArray join(const QByteArray& sep);
-    QString join(const QString& sep);
+    static QByteArray join();
+    static QByteArray join(const QByteArray& sep);
+    static QString join(const QString& sep);
 
  signals:
     void success();
