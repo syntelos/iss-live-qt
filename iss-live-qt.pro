@@ -3,6 +3,7 @@ TARGET = iss-live
 DEPENDPATH += . schema
 INCLUDEPATH += . schema
 
+QT -= gui
 QT += network
 
 CONFIG += debug
