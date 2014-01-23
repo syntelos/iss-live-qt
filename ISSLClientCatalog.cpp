@@ -20,7 +20,7 @@
 #include "ISSLClientCatalog.h"
 
 ISSLClientCatalog::ISSLClientCatalog(HTTPStreamClient* n, ISSLClientSession* s)
-    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/control.js")
+    : ISSLClientIO(n), net(n), session(s), rep(0), qbody(), path("/lightstreamer/control.js")
 {
 }
 ISSLClientCatalog::~ISSLClientCatalog()

@@ -15,61 +15,49 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <iostream>
-#include <QApplication>
-#include <QObject>
-#include <QTextStream>
 
-#include "HTTPStreamClient.h"
-#include "ISSLClientSession.h"
-#include "ISSLClientCatalog.h"
-#include "ISSLClientData.h"
+#include "Main.h"
 
-static QTextStream sout(stdout);
-static QTextStream serr(stderr);
+
+Main::Main(int argc, char** argv)
+    : a(new QApplication(argc, argv)),
+      issl(new ISSLClient(this))
+{
+    QObject::connect(issl,SIGNAL(connected(const ISSLClient&)),this,SLOT(connect(const ISSLClient&)));
+    QObject::connect(issl,SIGNAL(disconnected(const ISSLClient&)),this,SLOT(disconnect(const ISSLClient&)));
+
+    issl->connect();
+
+    issl->open();
+}
+void Main::connect(const ISSLClient& issl){
+
+    QObject::connect(issl.getClient(),SIGNAL(error(QAbstractSocket::SocketError)),a,SLOT(quit()));
+
+    QObject::connect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
+
+    QObject::connect(issl.getCatalog(),SIGNAL(failure()),a,SLOT(quit()));
+
+    QObject::connect(issl.getBind(),SIGNAL(failure()),a,SLOT(quit()));
+}
+void Main::disconnect(const ISSLClient& issl){
+
+    QObject::disconnect(issl.getClient(),SIGNAL(error(QAbstractSocket::SocketError)),a,SLOT(quit()));
+
+    QObject::disconnect(issl.getSession(),SIGNAL(failure()),a,SLOT(quit()));
+
+    QObject::disconnect(issl.getCatalog(),SIGNAL(failure()),a,SLOT(quit()));
+
+    QObject::disconnect(issl.getBind(),SIGNAL(failure()),a,SLOT(quit()));
+}
+
 
 int main(int argc, char** argv){
     QCoreApplication::setOrganizationName("syntelos");
     QCoreApplication::setOrganizationDomain("syntelos.com");
     QCoreApplication::setApplicationName("iss-live");
 
-    QApplication a(argc, argv);
+    Main main(argc, argv);
 
-
-    HTTPStreamClient* net = new HTTPStreamClient();
-
-
-    QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),net,SLOT(printSocketError(QAbstractSocket::SocketError)));
-    QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),&a,SLOT(quit()));
-
-
-    ISSLClientSession* session = new ISSLClientSession(net);
-    ISSLClientCatalog* ctrl = new ISSLClientCatalog(net,session);
-    ISSLClientData* bind = new ISSLClientData(net,session);
-
-
-    QObject::connect(net,SIGNAL(connected()),session,SLOT(io()));
-
-    QObject::connect(session,SIGNAL(success()),ctrl,SLOT(io()));
-
-    QObject::connect(ctrl,SIGNAL(success()),bind,SLOT(io()));
-
-
-    QObject::connect(bind,SIGNAL(received(const QList<ISSLClientDataChunkPair>&)),bind,SLOT(print(const QList<ISSLClientDataChunkPair>&)));
-
-    QObject::connect(bind,SIGNAL(los()),bind,SLOT(printLOS()));
-
-    QObject::connect(bind,SIGNAL(aos()),bind,SLOT(printAOS()));
-
-
-    QObject::connect(session,SIGNAL(failure()),&a,SLOT(quit()));
-
-    QObject::connect(ctrl,SIGNAL(failure()),&a,SLOT(quit()));
-
-    QObject::connect(bind,SIGNAL(failure()),&a,SLOT(quit()));
-
-
-    net->connectToHost(ISSLClientIO::HOST,ISSLClientIO::PORT);
-
-    return a.exec();
+    return main.a->exec();
 }

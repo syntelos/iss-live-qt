@@ -15,8 +15,8 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _ISSL_ISSLClient_H
-#define _ISSL_ISSLClient_H
+#ifndef _ISSL_ISSLClientIO_H
+#define _ISSL_ISSLClientIO_H
 
 #include <QByteArray>
 #include <QIODevice>
@@ -41,6 +41,9 @@ class ISSLClientIO : public QObject {
     static const char* CONN_KEAL;
     static const char* USER;
     static const char* USER_AGENT;
+
+    ISSLClientIO(QObject* p = 0);
+    ~ISSLClientIO();
 
  public slots:
     virtual void io() = 0;

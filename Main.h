@@ -16,19 +16,24 @@
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ISSLClientIO.h"
+#include <QApplication>
 
-const char* ISSLClientIO::HOST = "push1.jsc.nasa.gov";
-const int ISSLClientIO::PORT = 80;
-const char* ISSLClientIO::FORM = "application/x-www-form-urlencoded";
-const char* ISSLClientIO::CONN = "Connection";
-const char* ISSLClientIO::CONN_KEAL = "keep-alive";
-const char* ISSLClientIO::USER = "User-Agent";
-const char* ISSLClientIO::USER_AGENT = "Syntelos-ISS-Live/1.0";
+#include "ISSLClient.h"
 
-ISSLClientIO::ISSLClientIO(QObject* p)
-    : QObject(p)
-{
-}
-ISSLClientIO::~ISSLClientIO(){
-}
+class Main : public QObject {
+    Q_OBJECT;
+
+ public:
+
+    QApplication* a;
+    ISSLClient* issl;
+
+    Main(int argc, char** argv);
+
+ public slots:
+
+    void connect(const ISSLClient& issl);
+
+    void disconnect(const ISSLClient& issl);
+
+};

@@ -20,7 +20,7 @@
 #include "ISSLClientSession.h"
 
 ISSLClientSession::ISSLClientSession(HTTPStreamClient* n)
-    : net(n), rep(0), 
+    : ISSLClientIO(n), net(n), rep(0), 
       qbody("LS_phase=7901&LS_domain=nasa.gov&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_client_version=5.0&LS_adapter_set=PROXYTELEMETRY&"), 
       path("/lightstreamer/create_session.js"),
       session()

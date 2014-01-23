@@ -23,7 +23,7 @@
 
 
 ISSLClientData::ISSLClientData(HTTPStreamClient* n, ISSLClientSession* s)
-    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/bind_session.js"), blos(true)
+    : ISSLClientIO(n), net(n), session(s), rep(0), qbody(), path("/lightstreamer/bind_session.js"), blos(true)
 {
 }
 ISSLClientData::~ISSLClientData()

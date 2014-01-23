@@ -13,11 +13,13 @@ HEADERS += HTTPStreamChunk.h \
            HTTPStreamIO.h \
            HTTPStreamRequest.h \
            HTTPStreamResponse.h \
+           ISSLClient.h \
            ISSLClientCatalog.h \
            ISSLClientDataChunk.h \
            ISSLClientData.h \
            ISSLClientIO.h \
-           ISSLClientSession.h
+           ISSLClientSession.h \
+           Main.h
 
 
 SOURCES += HTTPStreamChunk.cpp \
@@ -25,6 +27,7 @@ SOURCES += HTTPStreamChunk.cpp \
            HTTPStreamIO.cpp \
            HTTPStreamRequest.cpp \
            HTTPStreamResponse.cpp \
+           ISSLClient.cpp \
            ISSLClientCatalog.cpp \
            ISSLClientIO.cpp \
            ISSLClientDataChunk.cpp \
