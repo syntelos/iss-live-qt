@@ -15,6 +15,7 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QDebug>
 
 #include "HTTPStreamChunk.h"
 
@@ -82,9 +83,23 @@ void HTTPStreamChunk::read(HTTP::Device* io){
                     input = io->read(len);
 
                     QBuffer::setData(input);
+
+                    qDebug() << "HTTPStreamChunk.read [success]: size" << len;
+                }
+                else {
+                    qDebug() << "HTTPStreamChunk.read [failure]: size" << len;
                 }
             }
+            else {
+                qDebug() << "HTTPStreamChunk.read [failure]: size ext" << chunk_llen;
+            }
         }
+        else {
+            qDebug() << "HTTPStreamChunk.read [failure]: read size" << line.length();
+        }
+    }
+    else {
+        qDebug() << "HTTPStreamChunk.read [failure]: read ready";
     }
 }
 void HTTPStreamChunk::write(HTTP::Device* io){

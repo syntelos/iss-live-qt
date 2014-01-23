@@ -27,6 +27,7 @@ class ISSLClientData : public ISSLClient {
     Q_OBJECT;
 
     HTTPStreamClient* net;
+    ISSLClientSession* session;
     HTTPStreamResponse* rep;
     QByteArray qbody;
     QVariant path;

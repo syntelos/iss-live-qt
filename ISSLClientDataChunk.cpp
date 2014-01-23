@@ -15,6 +15,7 @@
  * You should have received a copy of the LGPL and GPL along with this
  * program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QDebug>
 #include <QList>
 #include <QRegExp>
 #include <QString>
@@ -22,50 +23,71 @@
 
 #include "ISSLClientDataChunk.h"
 
-ISSLClientDataChunk::ISSLClientDataChunk(QIODevice* rep)
+ISSLClientDataChunk::ISSLClientDataChunk(const HTTPStreamChunk& rep)
     : QList(), input()
 {
-    if (rep->canReadLine()){
-        QByteArray lengthLine = rep->readLine();
-        bool ok;
-        int len = lengthLine.toInt(&ok,16);
-        if (0 < len){
-            QByteArray chunk = rep->read(len);
-            this->input += chunk;
-            QList<QByteArray> jsonObjects = chunk.split('\'');
-            foreach(const QByteArray& jsonObject, jsonObjects){
-                len = jsonObject.length();
-                if (8 < len && '{' == jsonObject[0] && '}' == jsonObject[len-1]){
-                    QString jsonObjectString(jsonObject);
-                    QRegExp rx0("[][,}{]");
-                    QRegExp rx1("[\":]");
+    QByteArray chunk = rep.buffer();
+    input += chunk.trimmed();
 
-                    ISSLClientDataChunkPair* pair = new ISSLClientDataChunkPair();
+    QList<QByteArray> jsonObjects = input.split('\'');
 
-                    QStringList jsonItem = jsonObjectString.split(rx0);
-                    foreach (const QString& jsonObject, jsonItem){
-                        QStringList nameValue = jsonObject.split(rx1);
-                        if (2 == nameValue.length()){
-                            const QString& name = nameValue.at(0);
-                            const QString& value = nameValue.at(1);
+    qDebug() << "ISSLClientDataChunk: [parse begin] count:" << jsonObjects.size();
 
-                            if (name == "Name"){
-                                QByteArray ascii = value.toAscii();
-                                pair->name.swap(ascii);
-                            }
-                            else if (name == "Value"){
-                                QByteArray ascii = value.toAscii();
-                                pair->value.swap(ascii);
-                            }
-                            else if (name == "CalibratedData"){
-                                QByteArray ascii = value.toAscii();
-                                pair->value.swap(ascii);
-                                break;
-                            }
+    foreach(const QByteArray& jsonObject, jsonObjects){
+
+        uint len = jsonObject.length();
+
+        if (8 < len && '{' == jsonObject[0] && '}' == jsonObject[len-1]){
+
+            QString jsonObjectString(jsonObject);
+            QRegExp rx0("[\\][,}{]");
+
+
+            qDebug() << "ISSLClientDataChunk: [object]" << jsonObjectString;
+
+            ISSLClientDataChunkPair* pair = new ISSLClientDataChunkPair();
+
+            QStringList jsonItem = jsonObjectString.split(rx0,QString::SkipEmptyParts);
+
+            foreach (const QString& jsonObject, jsonItem){
+
+                qDebug() << "ISSLClientDataChunk: [field]" << jsonObject;
+
+                int parse = jsonObject.indexOf(':');
+
+                if (0 < parse){
+                    QString name = jsonObject.mid(0,parse);
+                    name = name.replace('"',' ');
+                    name = name.trimmed();
+
+                    QString value = jsonObject.mid(parse+1);
+                    value = value.replace('"',' ');
+                    value = value.trimmed();
+
+                    if (!name.isEmpty() && !value.isEmpty()){
+
+                        qDebug() << "ISSLClientDataChunk: [object name-value]" << name << "=" << value;
+
+                        if (name == "Name"){
+                            QByteArray ascii = value.toAscii();
+                            pair->name.clear();
+                            pair->name += ascii;
+                        }
+                        else if (name == "Value"){
+                            QByteArray ascii = value.toAscii();
+                            pair->value.clear();
+                            pair->value += ascii;
+                        }
+                        else if (name == "CalibratedData"){
+                            QByteArray ascii = value.toAscii();
+                            pair->value.clear();
+                            pair->value += ascii;
+                            break;
                         }
                     }
                 }
             }
         }
     }
+    qDebug() << "ISSLClientDataChunk: [parse end]";
 }

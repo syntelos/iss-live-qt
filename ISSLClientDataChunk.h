@@ -20,6 +20,7 @@
 
 #include <QList>
 
+#include "HTTPStreamChunk.h"
 #include "ISSLClient.h"
 
 /*!
@@ -38,7 +39,7 @@ struct ISSLClientDataChunk : public QList<ISSLClientDataChunkPair> {
 
     QByteArray input;
 
-    ISSLClientDataChunk(QIODevice* rep);
+    ISSLClientDataChunk(const HTTPStreamChunk& rep);
 
 };
 #endif

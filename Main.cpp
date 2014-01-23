@@ -38,37 +38,25 @@ int main(int argc, char** argv){
     HTTPStreamClient* net = new HTTPStreamClient();
 
     QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),net,SLOT(printSocketError(QAbstractSocket::SocketError)));
+    QObject::connect(net,SIGNAL(error(QAbstractSocket::SocketError)),&a,SLOT(quit()));
 
     ISSLClientSession* session = new ISSLClientSession(net);
     ISSLClientCatalog* ctrl = new ISSLClientCatalog(net,session);
     ISSLClientData* bind = new ISSLClientData(net,session);
 
-    if (QObject::connect(net,SIGNAL(connected()),session,SLOT(io()))){
+    QObject::connect(net,SIGNAL(connected()),session,SLOT(io()));
 
-        qDebug() << "Main: connected HTTPStreamClient.connected to ISSLClientSession.io";
-    }
-    else {
-        qDebug() << "Main: failed to connect HTTPStreamClient.connected to ISSLClientSession.io";
-        return 1;
-    }
+    QObject::connect(session,SIGNAL(success()),ctrl,SLOT(io()));
 
-    if (QObject::connect(session,SIGNAL(success()),ctrl,SLOT(io()))){
+    QObject::connect(ctrl,SIGNAL(success()),bind,SLOT(io()));
 
-        qDebug() << "Main: connected ISSLClientSession.success to ISSLClientCatalog.io";
-    }
-    else {
-        qDebug() << "Main: failed to connect ISSLClientSession.success to ISSLClientCatalog.io";
-        return 1;
-    }
 
-    if (QObject::connect(ctrl,SIGNAL(success()),bind,SLOT(io()))){
+    QObject::connect(session,SIGNAL(failure()),&a,SLOT(quit()));
 
-        qDebug() << "Main: connected ISSLClientCatalog.success to ISSLClientData.io";
-    }
-    else {
-        qDebug() << "Main: failed to connect ISSLClientCatalog.success to ISSLClientData.io";
-        return 1;
-    }
+    QObject::connect(ctrl,SIGNAL(failure()),&a,SLOT(quit()));
+
+    QObject::connect(bind,SIGNAL(failure()),&a,SLOT(quit()));
+
 
     net->connectToHost(ISSLClient::HOST,ISSLClient::PORT);
 

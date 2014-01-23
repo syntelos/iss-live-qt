@@ -20,13 +20,8 @@
 #include "ISSLClientCatalog.h"
 
 ISSLClientCatalog::ISSLClientCatalog(HTTPStreamClient* n, ISSLClientSession* s)
-    : net(n), rep(0), qbody(), path("/lightstreamer/control.js")
+    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/control.js")
 {
-    qbody += "LS_session=";
-    qbody += s->session;
-    qbody += "&LS_table=2&LS_win_phase=49&LS_req_phase=172&LS_op=add&LS_mode=MERGE&LS_id=ISPWebItem&LS_schema=";
-    qbody += "TIME_000001%20TIME_000002";
-    qbody += "&LS_snapshot=true&LS_unique=1&";
 }
 ISSLClientCatalog::~ISSLClientCatalog()
 {
@@ -37,7 +32,16 @@ ISSLClientCatalog::~ISSLClientCatalog()
     }
 }
 void ISSLClientCatalog::io(){
-    qDebug() << "ISSLClientCatalog.io";
+
+    qbody.clear();
+    qbody += "LS_session=";
+    qbody += session->session;
+    qbody += "&LS_table=2&LS_win_phase=49&LS_req_phase=172&LS_op=add&LS_mode=MERGE&LS_id=ISPWebItem&LS_schema=";
+    qbody += "TIME_000001%20TIME_000002";
+    qbody += "&LS_snapshot=true&LS_unique=1&";
+
+
+    qDebug() << "ISSLClientCatalog.io [body]" << qbody;
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -64,7 +68,7 @@ void ISSLClientCatalog::ready(){
 
     uint len = rep->getContentLength();
     if (0 < len){
-        qDebug() << "ISSLClientCatalog [success]: missing content length";
+        qDebug() << "ISSLClientCatalog [success]";
 
         emit success();
     }

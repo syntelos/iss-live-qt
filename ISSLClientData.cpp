@@ -21,11 +21,8 @@
 #include "ISSLClientDataChunk.h"
 
 ISSLClientData::ISSLClientData(HTTPStreamClient* n, ISSLClientSession* s)
-    : net(n), rep(0), qbody(), path("/lightstreamer/bind_session.js"), los(true)
+    : net(n), session(s), rep(0), qbody(), path("/lightstreamer/bind_session.js"), los(true)
 {
-    qbody += "LS_session=";
-    qbody += s->session;
-    qbody += "&LS_phase=7903&LS_domain=nasa.gov&";
 }
 ISSLClientData::~ISSLClientData()
 {
@@ -42,7 +39,12 @@ bool ISSLClientData::hasNotSignal(){
     return los;
 }
 void ISSLClientData::io(){
-    qDebug() << "ISSLClientData.io";
+    qbody.clear();
+    qbody += "LS_session=";
+    qbody += session->session;
+    qbody += "&LS_phase=7903&LS_domain=nasa.gov&";
+
+    qDebug() << "ISSLClientData.io [body]" << qbody;
 
     HTTPStreamRequest req;
     req.path.setValue(path);
@@ -72,7 +74,12 @@ void ISSLClientData::ready(){
 
     while (true){
 
-        ISSLClientDataChunk data(rep);
+        HTTPStreamChunk chunk;
+        {
+            chunk.read(net);
+        }
+        ISSLClientDataChunk data(chunk);
+
         if (0 < data.size()){
             initialization = 0;
             los = false;
@@ -120,10 +127,10 @@ void ISSLClientData::ready(){
         }
         else {
 
+            qDebug() << "ISSLClientData.ready [failure]: " << data.input;
+
             delete rep;
             rep = 0;
-
-            qDebug() << "ISSLClientData.ready [failure]: ?";
 
             emit failure();
 

@@ -40,6 +40,7 @@ void HTTPStreamRequest::read(HTTP::Device* io){
          * Request line
          */
         QByteArray line = io->readLine();
+        line = line.trimmed();
         if (0 < line.length()){
             QList<QByteArray> linary = line.split(' ');
             int count = linary.count();
