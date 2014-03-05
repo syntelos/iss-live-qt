@@ -18,10 +18,18 @@ Quick start
 
 Usage
 
-    ./iss-live [CONSOLE|SYMBOL]*
+    ./iss-live [ ? | ?? | [CONSOLE|SYMBOL]* ]
 
     Watch any combination of consoles, e.g. "VVO" or "SPARTAN", or
     symbols, e.g. "S0000001" or "S0000003". Default "VVO".
+
+    The command line argument "?" lists available consoles.
+
+    The command line argument "??" lists available symbols by console.
+
+    Any other command line argument is expected to be a console or
+    telemetry symbol.  When recognized, the telemetry symbol or group
+    will be added to the session.
 
 Table "schema"
 
@@ -29,6 +37,10 @@ Table "schema"
     following columns: name (symbol), console (mission control), tmtc
     (a derived symbol), units, columns, format type, format, short
     description, long description.  
+
+Main.cpp
+
+    Command line processor and example driver.
 
 ISSLClient*
 
