@@ -90,29 +90,30 @@ ISSLClientDataChunk::ISSLClientDataChunk(const HTTPStreamChunk& rep)
                             pair.value.clear();
                             pair.value += ascii;
 
-                            if (pair_open){
-                                pair_open = false;
-                                append(pair);
-                            }
+                            // qDebug() << "ISSLClientDataChunk: [Value]" << pair.name << "=" << pair.value;
+
+                            pair_open = false;
                         }
                         else if (name == "CalibratedData"){
                             QByteArray ascii = value.toAscii();
                             pair.value.clear();
                             pair.value += ascii;
 
-                            if (pair_open){
-                                pair_open = false;
-                                append(pair);
-                            }
+                            // qDebug() << "ISSLClientDataChunk: [CalibratedData]" << pair.name << "=" << pair.value;
+
+                            pair_open = false;
                             break;
                         }
                     }
                 }
             }
-            /*
-             * Pair is auto, so there's no "if (pair_open) { delete
-             * pair; }", here.
-             */
+
+            if (!pair_open){
+                /*
+                 * Late-append auto by copy
+                 */
+                append(pair);
+            }
         }
     }
     // qDebug() << "ISSLClientDataChunk: [parse end]";
