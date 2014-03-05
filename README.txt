@@ -5,13 +5,20 @@ Abstract
     http://spacestationlive.jsc.nasa.gov/.  This directory builds as a
     command line application.
 
+Prerequisites
+
+    qt4
+    qmake
+
 Quick start
 
-    ./run.sh
+    qmake
+    make
+    ./iss-live
 
 Usage
 
-    ./run.sh [CONSOLE|SYMBOL]*
+    ./iss-live [CONSOLE|SYMBOL]*
 
     Watch any combination of consoles, e.g. "VVO" or "SPARTAN", or
     symbols, e.g. "S0000001" or "S0000003". Default "VVO".
@@ -33,12 +40,6 @@ ISSLSchema*
     Catalog largely generated from "schema.tsv".
 
 Notes
-
-    Data values
-
-        Not all data values are well defined, from the service or in the
-        schematic (catalog) meta data.  Types defined as enumerated in the
-        schema may have mapped values from the network service.  
 
     Schema units
 
