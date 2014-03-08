@@ -1,3 +1,0 @@
-parser.h:QJsonParser.h
-objecthelper.h:QJsonQObjectHelper.h
-serializer.h:QJsonSerializer.h
