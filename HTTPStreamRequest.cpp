@@ -87,10 +87,9 @@ void HTTPStreamRequest::write(HTTP::Device* io){
             setHeader("Content-Length", len);
         }
 
-        HTTP::Device* device = dynamic_cast<HTTP::Device*>(io);
-        if (0 != device){
-            QString hostname = device->peerName();
-            quint16 portnum = device->peerPort();
+        {
+            QString hostname = io->peerName();
+            quint16 portnum = io->peerPort();
             if (0 != portnum && 80 != portnum){
                 QString fmt;
                 fmt = QString(":%1").arg(portnum);
